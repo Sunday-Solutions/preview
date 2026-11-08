@@ -1,97 +1,97 @@
-/* Logo preview for Sunday Solutions.
-   Visitors see the default logo. Opening the site with ?logo=<id> (the Logo Explorer's
-   "See it on the site" button does this) applies that logo, shows a small picker, and
-   remembers the choice in this browser. ?logo=original resets. */
+/* Logo picker for Sunday Solutions.
+   Click the logo (header or footer) to open a popup of every logo; click one to use it.
+   The choice is saved in this browser and applied to the header, promise board, footer
+   and favicon on every page. ?logo=<id> also selects one (used by /logos/). */
 (() => {
   const KEY = 'ss-brand-preview';
-  const LOGOS = [
-    ['original', 'Current logo'],
-    ['a-sun-cut-s', 'A · Sun-cut S'],
-    ['b-sundown-screen', 'B · Sundown Screen'],
-    ['c-week-rise', 'C · Week Rise'],
-    ['d-half-day-s', 'D · Half-day S'],
-    ['e-sunday-mode', 'E · Sunday Mode'],
-    ['f-sun-path', 'F · Sun Path'],
-    ['g-sunrise-prompt', 'G · Sunrise Prompt'],
-    ['h-code-sun', 'H · Code Sun'],
-    ['i-sun-chip', 'I · Sun Chip'],
-    ['j-network-sun', 'J · Network Sun'],
-  ];
-  const FONTS = ['DM Sans', 'Outfit', 'Manrope', 'Plus Jakarta Sans', 'Sora', 'Space Grotesk', 'Fraunces', 'Instrument Serif'];
   const BASE = new URL('./', (document.currentScript && document.currentScript.src) || location.href).href;
-  const ORIGINAL = BASE + 'assets/logo-mark.svg';
+  const C = id => `logos/svg/current/${id}-color.svg`;
+  const A = id => `logos/svg/archive/${id}.svg`;
+  const LOGOS = [
+    ['original', 'Current logo', 'assets/logo-mark.svg'],
+    ['a-sun-cut-s', 'Sun-cut S', C('a-sun-cut-s')],
+    ['b-sundown-screen', 'Sundown Screen', C('b-sundown-screen')],
+    ['c-week-rise', 'Week Rise', C('c-week-rise')],
+    ['d-half-day-s', 'Half-day S', C('d-half-day-s')],
+    ['e-sunday-mode', 'Sunday Mode', C('e-sunday-mode')],
+    ['f-sun-path', 'Sun Path', C('f-sun-path')],
+    ['g-sunrise-prompt', 'Sunrise Prompt', C('g-sunrise-prompt')],
+    ['h-code-sun', 'Code Sun', C('h-code-sun')],
+    ['i-sun-chip', 'Sun Chip', C('i-sun-chip')],
+    ['j-network-sun', 'Network Sun', C('j-network-sun')],
+    ['r3-a-hammer-ray', 'Hammer Ray', A('r3-a-hammer-ray')],
+    ['r3-b-sunday-screen', 'Sunday Screen', A('r3-b-sunday-screen')],
+    ['r3-c-sunrise-s', 'Sunrise S', A('r3-c-sunrise-s')],
+    ['r4-hunter-sunrise', 'Hunter Sunrise', A('r4-hunter-sunrise')],
+    ['r4-seventh-day', 'Seventh Day', A('r4-seventh-day')],
+    ['r4-sunset-s', 'Sunset S', A('r4-sunset-s')],
+    ['r2-1-monoline', 'Monoline', A('r2-1-monoline')],
+    ['r2-2-sunburst', 'Sunburst', A('r2-2-sunburst')],
+    ['r2-3-sunrise-display', 'Sunrise Display', A('r2-3-sunrise-display')],
+  ];
+  const byId = id => LOGOS.find(l => l[0] === id) || LOGOS[0];
 
-  let st = {};
-  try { st = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
-
+  let current = 'original';
+  try { current = localStorage.getItem(KEY + ':logo') || 'original'; } catch (e) {}
   const q = new URLSearchParams(location.search);
-  if (q.has('logo')) { st.logo = q.get('logo'); st.picker = st.logo !== 'original'; }
-  if (q.has('font')) st.font = q.get('font');
-  if (q.has('logo') || q.has('font')) save();
-  if (!LOGOS.some(([id]) => id === st.logo)) st.logo = 'original';
-
-  const src = id => id === 'original' ? ORIGINAL : `${BASE}logos/svg/current/${id}-color.svg`;
-
-  function loadFont(name) {
-    if (!name || name === 'DM Sans' || document.querySelector(`link[data-font="${name}"]`)) return;
-    const l = document.createElement('link');
-    l.rel = 'stylesheet'; l.dataset.font = name;
-    l.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(name)}:wght@500;600;700;800&display=swap`;
-    document.head.appendChild(l);
-  }
+  if (q.has('logo')) current = q.get('logo');
+  current = byId(current)[0];
+  const save = () => { try { localStorage.setItem(KEY + ':logo', current); } catch (e) {} };
+  if (q.has('logo')) save();
 
   function apply() {
+    const url = BASE + byId(current)[2];
     document.querySelectorAll('img[src$="logo-mark.svg"], img[data-brand-mark]').forEach(img => {
       img.dataset.brandMark = '1';
-      img.src = src(st.logo);
+      img.src = url;
     });
     const icon = document.querySelector('link[rel="icon"]');
-    if (icon) icon.href = src(st.logo);
-    document.querySelectorAll('.wordmark').forEach(w => {
-      w.style.fontFamily = st.font && st.font !== 'DM Sans' ? `'${st.font}', var(--font)` : '';
-    });
-    loadFont(st.font);
-    const sel = document.getElementById('bp-logo'); if (sel) sel.value = st.logo;
-    const fs = document.getElementById('bp-font'); if (fs) fs.value = st.font || 'DM Sans';
+    if (icon) icon.href = url;
+    document.querySelectorAll('#logo-picker [data-id]').forEach(b =>
+      b.setAttribute('aria-pressed', b.dataset.id === current ? 'true' : 'false'));
   }
 
-  function picker() {
-    if (document.getElementById('brand-picker')) return;
+  let dlg;
+  function build() {
     const css = document.createElement('style');
-    css.textContent = `#brand-picker{position:fixed;left:16px;bottom:16px;z-index:60;background:#fffefa;color:#183e35;border:1px solid #dcded5;border-radius:12px;box-shadow:0 10px 40px #10251f2e;padding:12px;width:min(300px,calc(100vw - 32px));font:13px/1.4 'DM Sans',Arial,sans-serif}
-#brand-picker .bp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700}
-#brand-picker .bp-x{background:none;border:0;font-size:20px;line-height:1;padding:2px 6px;color:#64716a}
-#brand-picker label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64716a;margin:8px 0 4px}
-#brand-picker .bp-row{display:flex;gap:6px}
-#brand-picker select{flex:1;min-width:0;padding:7px 8px;border:1px solid #dcded5;border-radius:8px;background:#fff;color:#183e35;font:inherit}
-#brand-picker button.bp-b{border:1px solid #dcded5;background:#fff;border-radius:8px;padding:7px 10px;color:#183e35}
-#brand-picker .bp-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px}
-#brand-picker .bp-foot a{text-decoration:underline}
-#brand-picker .bp-saved{color:#4c7a3e;font-weight:600}`;
+    css.textContent = `
+#logo-picker{width:min(760px,calc(100% - 32px));max-height:calc(100vh - 48px);padding:24px;border-radius:14px}
+#logo-picker h2{font-size:22px;letter-spacing:-.5px;margin:0 0 4px}
+#logo-picker p.lp-sub{font-size:13px;margin:0 0 18px;color:var(--muted,#64716a)}
+#logo-picker .lp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+#logo-picker .lp-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px 10px;border:1px solid #dcded5;border-radius:12px;background:#fff;font-size:12px;font-weight:600;color:#183e35;transition:border-color .15s,transform .15s}
+#logo-picker .lp-item:hover{border-color:#183e35;transform:translateY(-2px)}
+#logo-picker .lp-item[aria-pressed="true"]{border-color:#183e35;box-shadow:0 0 0 2px #183e35 inset;background:#f8f6ee}
+#logo-picker .lp-item img{width:64px;height:64px}
+#logo-picker .lp-close{position:absolute;right:12px;top:8px;background:none;border:0;font-size:28px;line-height:1;padding:4px 8px;color:#183e35}
+.brand{cursor:pointer}`;
     document.head.appendChild(css);
-    const el = document.createElement('div');
-    el.id = 'brand-picker';
-    el.setAttribute('role', 'region');
-    el.setAttribute('aria-label', 'Logo preview');
-    el.innerHTML = `<div class="bp-top"><span>Logo preview</span><button class="bp-x" type="button" aria-label="Close logo preview">×</button></div>
-<label for="bp-logo">Logo</label>
-<div class="bp-row"><button class="bp-b" type="button" data-step="-1" aria-label="Previous logo">←</button><select id="bp-logo">${LOGOS.map(([id, n]) => `<option value="${id}">${n}</option>`).join('')}</select><button class="bp-b" type="button" data-step="1" aria-label="Next logo">→</button></div>
-<label for="bp-font">Wordmark font</label>
-<div class="bp-row"><select id="bp-font">${FONTS.map(f => `<option>${f}</option>`).join('')}</select></div>
-<div class="bp-foot"><span class="bp-saved" aria-live="polite">Saved in this browser</span><a href="${BASE}logos/">All logos</a></div>`;
-    document.body.appendChild(el);
-    const flash = () => { const s = el.querySelector('.bp-saved'); s.textContent = 'Saved ✓'; clearTimeout(flash.t); flash.t = setTimeout(() => s.textContent = 'Saved in this browser', 1400); };
-    el.querySelector('#bp-logo').addEventListener('change', e => { st.logo = e.target.value; save(); apply(); flash(); });
-    el.querySelector('#bp-font').addEventListener('change', e => { st.font = e.target.value; save(); apply(); flash(); });
-    el.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => {
-      const i = LOGOS.findIndex(([id]) => id === st.logo);
-      st.logo = LOGOS[(i + Number(b.dataset.step) + LOGOS.length) % LOGOS.length][0];
-      save(); apply(); flash();
-    }));
-    el.querySelector('.bp-x').addEventListener('click', () => { st.picker = false; save(); el.remove(); });
+    dlg = document.createElement('dialog');
+    dlg.id = 'logo-picker';
+    dlg.setAttribute('aria-labelledby', 'lp-title');
+    dlg.innerHTML = `<button class="lp-close" type="button" aria-label="Close">×</button>
+<h2 id="lp-title">Pick a logo</h2>
+<p class="lp-sub">Click one to use it across the site. Saved in this browser.</p>
+<div class="lp-grid">${LOGOS.map(([id, name, path]) =>
+      `<button type="button" class="lp-item" data-id="${id}" aria-pressed="false"><img src="${BASE + path}" alt="" loading="lazy">${name}</button>`).join('')}</div>`;
+    document.body.appendChild(dlg);
+    dlg.querySelector('.lp-close').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', e => {
+      if (e.target === dlg) return dlg.close();   // backdrop
+      const b = e.target.closest('[data-id]');
+      if (!b) return;
+      current = b.dataset.id; save(); apply(); dlg.close();
+    });
   }
 
-  function init() { if (st.picker || q.has("logo")) picker(); apply(); }
+  function init() {
+    apply();
+    document.querySelectorAll('.brand').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      if (!dlg) build();
+      apply();
+      dlg.showModal();
+    }));
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
