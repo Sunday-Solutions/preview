@@ -179,6 +179,8 @@
 .cs-cta p:not(.eyebrow) { font-size: 16px; line-height: 1.8; margin-bottom: 28px; }
 .cs-cta-actions { display: flex; justify-content: center; align-items: center; gap: 26px; flex-wrap: wrap; }
 .cs-footnote { font-size: 11px; color: #7d847b; padding: 22px 0; text-align: center; }
+.cs-more { text-align: center; font-size: 14px; font-weight: 600; padding-top: 28px; margin: 0 auto; }
+.cs-more a { color: var(--green); text-decoration: underline; text-underline-offset: 4px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1150px) {
