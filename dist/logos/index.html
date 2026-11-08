@@ -125,11 +125,20 @@ select{width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--lin
   </aside>
 </main>
 <div class="thumbs">
+  <h3>Sun &amp; laptop</h3><div class="grid" id="gridSun"></div>
   <h3>Current direction</h3><div class="grid" id="gridCurrent"></div>
   <h3>Earlier rounds</h3><div class="grid" id="gridArchive"></div>
 </div>
 <script>
 const LOGOS=[
+ {id:"laptop",name:"Sun & Laptop (current logo)",idea:"The site's current mark: a laptop inside the sun arch.",dir:"sunlaptop",colorOnly:true},
+ {id:"original-hammer",name:"Original · Hammer & Sun",idea:"The first logo: a hammer across the sun arch.",dir:"sunlaptop",colorOnly:true},
+ {id:"screen-sunrise",name:"Sun & Laptop · Screen Sunrise",idea:"The laptop shows a small sunrise on its screen.",dir:"sunlaptop",colorOnly:true},
+ {id:"solid-screen",name:"Sun & Laptop · Solid Screen",idea:"A filled screen with a yellow sunrise cut into it.",dir:"sunlaptop",colorOnly:true},
+ {id:"open-laptop",name:"Sun & Laptop · Open Laptop",idea:"A perspective keyboard deck, like the original artwork.",dir:"sunlaptop",colorOnly:true},
+ {id:"prompt",name:"Sun & Laptop · Prompt Screen",idea:"A terminal prompt on the screen.",dir:"sunlaptop",colorOnly:true},
+ {id:"big-screen",name:"Sun & Laptop · Big Screen",idea:"A wider arch and larger laptop, fewer rays.",dir:"sunlaptop",colorOnly:true},
+ {id:"on-the-horizon",name:"Sun & Laptop · Monitor",idea:"A screen standing on the horizon line inside the arch.",dir:"sunlaptop",colorOnly:true},
  {id:"a-sun-cut-s",name:"A · Sun-cut S",idea:"One sun, two horizon cuts — what's left between them is the S of Sunday.",dir:"current"},
  {id:"b-sundown-screen",name:"B · Sundown Screen",idea:"A laptop with the sun setting on screen: the work's done, the weekend's yours.",dir:"current"},
  {id:"c-week-rise",name:"C · Week Rise",idea:"Six working days climb; the seventh is the sun.",dir:"current"},
@@ -195,7 +204,7 @@ LOGOS.forEach((l,j)=>{
   const b=document.createElement("button");b.type="button";b.className="thumb";
   b.innerHTML=`<span class="t"><img src="${fileFor(l,false)}" alt=""></span><span>${l.name.split(" · ")[1]}</span>`;
   b.onclick=()=>{state.i=j;render();$("#stage").scrollIntoView({behavior:"smooth",block:"center"})};
-  $(l.dir==="current"?"#gridCurrent":"#gridArchive").appendChild(b);
+  $(l.dir==="current"?"#gridCurrent":l.dir==="sunlaptop"?"#gridSun":"#gridArchive").appendChild(b);
 });
 render();
 </script>

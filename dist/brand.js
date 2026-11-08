@@ -9,6 +9,13 @@
   const A = id => `logos/svg/archive/${id}.svg`;
   const LOGOS = [
     ['original', 'Current logo', 'assets/logo-mark.svg'],
+    ['sl-original-hammer', 'Original (hammer)', 'logos/svg/sunlaptop/original-hammer.svg'],
+    ['sl-screen-sunrise', 'Screen Sunrise', 'logos/svg/sunlaptop/screen-sunrise.svg'],
+    ['sl-solid-screen', 'Solid Screen', 'logos/svg/sunlaptop/solid-screen.svg'],
+    ['sl-open-laptop', 'Open Laptop', 'logos/svg/sunlaptop/open-laptop.svg'],
+    ['sl-prompt', 'Prompt Screen', 'logos/svg/sunlaptop/prompt.svg'],
+    ['sl-big-screen', 'Big Screen', 'logos/svg/sunlaptop/big-screen.svg'],
+    ['sl-on-the-horizon', 'Monitor', 'logos/svg/sunlaptop/on-the-horizon.svg'],
     ['a-sun-cut-s', 'Sun-cut S', C('a-sun-cut-s')],
     ['b-sundown-screen', 'Sundown Screen', C('b-sundown-screen')],
     ['c-week-rise', 'Week Rise', C('c-week-rise')],
