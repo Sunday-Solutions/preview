@@ -118,7 +118,29 @@ function renderRecipes() {
   }).join('') + `<div><p><span>No recipe yet</span></p><p><span>Ethiopia Filter 250g</span></p><p><span>Chai Powder 1kg</span></p><p style="color:var(--muted)"><span>Takeaway Cups: not coffee, ignored</span></p></div>`;
 }
 
+// ---------- Quick read / Full story toggle ----------
+// Quick read is the default. ?view=full in the URL opens the full story (handy for sharing).
+function setMode(mode, { fromClick = false } = {}) {
+  document.body.dataset.mode = mode;
+  document.querySelectorAll('[data-mode-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modeBtn === mode)));
+  const url = new URL(window.location.href);
+  if (mode === 'full') url.searchParams.set('view', 'full');
+  else url.searchParams.delete('view');
+  history.replaceState(null, '', url);
+  if (fromClick) {
+    // If the reader has scrolled past the top, bring them back to the start of the story.
+    const bar = $('.cs-viewbar');
+    if (bar && window.scrollY > bar.offsetTop) window.scrollTo({ top: bar.offsetTop, behavior: 'instant' });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  setMode(params.get('view') === 'full' ? 'full' : 'simple');
+  document.querySelectorAll('[data-mode-btn]').forEach((b) =>
+    b.addEventListener('click', () => setMode(b.dataset.modeBtn, { fromClick: true }))
+  );
+
   if (!$('#demo-orders')) return;
   ORDERS.slice(0, 2).forEach((o) => selected.add(o.id)); // start with two ticked so it's obvious what to do
   renderOrders();

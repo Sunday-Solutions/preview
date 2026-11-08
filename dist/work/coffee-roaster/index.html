@@ -13,11 +13,11 @@
   <link rel="icon" href="../../assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../../assets/fonts.css">
   <link rel="stylesheet" href="../../styles.css?v=2">
-  <link rel="stylesheet" href="case-study.css">
-  <script src="case-study.js" defer></script>
+  <link rel="stylesheet" href="case-study.css?v=2">
+  <script src="case-study.js?v=2" defer></script>
   <script src="../../brand.js" defer></script>
 </head>
-<body>
+<body data-mode="simple">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <div class="topline"><div class="container topline-inner"><span><span class="sun-small">☀</span> Australian made. Small business friendly.</span><span>Free quotes within 24 hours <span class="topline-separator">/</span> Open 7 days</span></div></div>
@@ -34,8 +34,53 @@
 
   <main id="main">
 
-    <!-- HERO -->
-    <section class="cs-hero">
+    <!-- VIEW TOGGLE -->
+    <div class="cs-viewbar">
+      <div class="container cs-viewbar-inner">
+        <span class="cs-viewbar-label">How much detail?</span>
+        <div class="cs-toggle" role="group" aria-label="Choose how much detail to read">
+          <button type="button" data-mode-btn="simple" aria-pressed="true">Quick read</button>
+          <button type="button" data-mode-btn="full" aria-pressed="false">Full story</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIMPLE: HERO -->
+    <section class="cs-simple-hero" data-view="simple">
+      <div class="container cs-simple-hero-inner">
+        <p class="eyebrow"><span class="line"></span> CASE STUDY · COFFEE ROASTER <span class="line"></span></p>
+        <h1 class="cs-h1">One click to plan <span class="underline">the roast.</span></h1>
+        <p class="cs-simple-lead">One of NSW's biggest coffee roasters was adding up café orders by hand to work out what to roast. We built them their own tool that does it in one click.</p>
+        <ul class="cs-simple-pills"><li>No subscription</li><li>They own it</li><li>Cafés didn't change a thing</li></ul>
+        <a class="button button-yellow" href="#demo">Try it yourself ↓</a>
+      </div>
+    </section>
+
+    <!-- SIMPLE: BEFORE / AFTER -->
+    <section class="cs-ba" data-view="simple">
+      <div class="container cs-ba-grid">
+        <div class="cs-ba-card cs-ba-before">
+          <p class="cs-ba-label">Before</p>
+          <ul>
+            <li>Café orders spread across 4 accounts</li>
+            <li>Every bag worked out into beans by hand</li>
+            <li>Added up before each roast. Easy to get wrong.</li>
+          </ul>
+        </div>
+        <div class="cs-ba-arrow" aria-hidden="true">→</div>
+        <div class="cs-ba-card cs-ba-after">
+          <p class="cs-ba-label">After</p>
+          <ul>
+            <li>Orders flow in on their own, every 10 minutes</li>
+            <li>Every product knows its recipe</li>
+            <li>Tick the orders, press calculate. Done.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL: HERO -->
+    <section class="cs-hero" data-view="full">
       <div class="container cs-hero-grid">
         <div class="cs-hero-copy">
           <p class="eyebrow"><span class="line"></span> CASE STUDY · COFFEE ROASTING</p>
@@ -69,7 +114,7 @@
     </section>
 
     <!-- FACT STRIP -->
-    <div class="cs-facts">
+    <div class="cs-facts" data-view="full">
       <div class="container cs-facts-grid">
         <div><strong>Every 10 min</strong><span>new orders pulled in automatically</span></div>
         <div><strong>4 accounts</strong><span>every brand and wholesale account in one place</span></div>
@@ -79,7 +124,7 @@
     </div>
 
     <!-- THE CLIENT / BEFORE -->
-    <section class="section-pad cs-before">
+    <section class="section-pad cs-before" data-view="full">
       <div class="container cs-split">
         <div>
           <p class="eyebrow">THE CLIENT</p>
@@ -98,7 +143,7 @@
     </section>
 
     <!-- WHY NOT A SUBSCRIPTION -->
-    <section class="cs-usual">
+    <section class="cs-usual" data-view="full">
       <div class="container cs-usual-panel">
         <div>
           <p class="eyebrow">THE USUAL ANSWER</p>
@@ -114,7 +159,7 @@
     </section>
 
     <!-- WHAT WE BUILT -->
-    <section class="section-pad cs-how" id="how">
+    <section class="section-pad cs-how" id="how" data-view="full">
       <div class="container">
         <div class="section-heading"><div><p class="eyebrow">WHAT WE BUILT</p><h2>Four steps. No more adding up by hand.</h2></div><p>A web app their team opens in the browser. Here's what it does, in plain English.</p></div>
 
@@ -228,7 +273,7 @@
     </section>
 
     <!-- CUSTOM VS SUBSCRIPTION -->
-    <section class="section-pad cs-compare">
+    <section class="section-pad cs-compare" data-view="full">
       <div class="container">
         <div class="section-heading"><div><p class="eyebrow">WHY CUSTOM WON</p><h2>Their own planner vs. another subscription.</h2></div></div>
         <div class="cs-compare-table" role="table" aria-label="Off-the-shelf software compared with their own planner">
@@ -243,8 +288,21 @@
       </div>
     </section>
 
+    <!-- SIMPLE: WHY -->
+    <section class="section-pad cs-why" data-view="simple">
+      <div class="container">
+        <h2 class="cs-why-title">Why build it instead of buying software?</h2>
+        <div class="cs-why-grid">
+          <div><span class="cs-why-icon">$</span><h3>Paid for once</h3><p>No monthly fee per user. It's theirs to keep.</p></div>
+          <div><span class="cs-why-icon">✓</span><h3>Fits how they work</h3><p>Their recipes, their brands. Cafés kept ordering the same way.</p></div>
+          <div><span class="cs-why-icon">↗</span><h3>Grows with them</h3><p>When the business changes, the software changes too.</p></div>
+        </div>
+        <p class="cs-why-note">Want us to look after it? Our care plan is <strong>$50 a month, flat</strong>. Not per user.</p>
+      </div>
+    </section>
+
     <!-- GREW WITH THEM -->
-    <section class="cs-grew">
+    <section class="cs-grew" data-view="full">
       <div class="container cs-grew-grid">
         <div>
           <p class="eyebrow">IT GROWS WITH THEM</p>
@@ -261,7 +319,7 @@
     </section>
 
     <!-- UNDER THE BONNET -->
-    <section class="section-pad cs-tech">
+    <section class="section-pad cs-tech" data-view="full">
       <div class="container">
         <details class="cs-tech-details">
           <summary>Under the bonnet (for the tech-curious)<span class="plus"></span></summary>
