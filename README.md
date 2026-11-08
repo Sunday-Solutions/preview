@@ -21,6 +21,10 @@ The contact email `hello@sundaysolutions.com.au`, 6+ years experience, 24-hour q
 - Hero brief: natural editorial photograph of a sunlit small Australian workshop office; worn timber desk, silver laptop with a simple green and cream invoicing screen, notepad, yellow mug, tape measure, boxes and plants; warm afternoon light, no people or branding.
 - DM Sans downloaded from Google Fonts; bundled licence in `dist/assets/FONT-LICENSE.txt`.
 
+## Logo explorer
+
+`dist/logos/` (live at `/logos/`) holds the logo concepts as SVG (`svg/current/` for the active direction: symbol, colour tile and lockup per concept; `svg/archive/` for earlier rounds) and a viewer page: click the logo or use the arrow keys to cycle, switch colour/one-colour, background, and preview the wordmark in matching fonts. Page is `noindex`.
+
 ## Validation
 
 JavaScript syntax, referenced assets, unique element IDs and section anchors checked. Browser checks covered desktop, 390px mobile and 768px tablet views, service-category preselection, enquiry draft generation, FAQ expansion, privacy dialog and mobile navigation.

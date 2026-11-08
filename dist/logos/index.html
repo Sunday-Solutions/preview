@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Logo Explorer | Sunday Solutions</title>
+<link rel="icon" href="../assets/logo-mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Sora:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Serif&display=swap">
+<style>
+:root{--green:#1D4338;--yellow:#EFC235;--cream:#FBF6E6;--paper:#fffefa;--ink:#16241f;--muted:#5f6d66;--line:#e2e1d8;--stage:#fffefa;--mark:#16241f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px clamp(16px,4vw,40px);border-bottom:1px solid var(--line)}
+header h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.01em}
+header a{color:var(--muted);font-size:14px;text-decoration:none}
+main{max-width:1180px;margin:0 auto;padding:24px clamp(16px,4vw,40px) 64px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px}
+@media (max-width:900px){main{grid-template-columns:1fr}}
+.stage{background:var(--stage);border:1px solid var(--line);border-radius:20px;min-height:min(62vh,560px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:40px 20px;cursor:pointer;user-select:none;transition:background .25s;position:relative}
+.stage:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.stage .hint{position:absolute;bottom:14px;font-size:12px;color:var(--muted);opacity:.8}
+.symbol{width:min(300px,60vw);aspect-ratio:1;color:var(--mark);transition:transform .25s}
+.stage:active .symbol{transform:scale(.97)}
+.symbol svg,.lock-sym svg{width:100%;height:100%;display:block}
+.lockup{display:flex;align-items:center;gap:18px;color:var(--mark)}
+.lock-sym{width:84px;height:84px;flex:none}
+.word{display:flex;flex-direction:column;line-height:1}
+.word .w1{font-size:56px;font-weight:600;letter-spacing:-.02em}
+.word .w2{font-size:15px;font-weight:500;letter-spacing:.42em;margin-top:8px;padding-left:2px}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:18px 4px 0}
+.meta h2{margin:0;font-size:22px;letter-spacing:-.01em}
+.meta p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+.count{color:var(--muted);font-size:14px;white-space:nowrap}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+button,.btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+button:hover,.btn:hover{border-color:#bdbcb0}
+button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+aside{display:flex;flex-direction:column;gap:22px}
+.group h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.swatch{width:34px;height:34px;padding:0;border-radius:50%}
+.swatch[aria-pressed="true"]{outline:3px solid var(--yellow);outline-offset:2px;background:inherit}
+select{width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--line);font:inherit;background:#fff;color:var(--ink)}
+.thumbs{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 64px}
+.thumbs h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:28px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.thumb{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.thumb .t{width:64px;height:64px}
+.thumb .t img{width:100%;height:100%}
+.thumb[aria-current="true"]{border-color:var(--green);box-shadow:0 0 0 2px var(--green) inset;color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Sunday Solutions · Logo Explorer</h1>
+  <a href="../">← Back to site</a>
+</header>
+<main>
+  <section>
+    <div class="stage" id="stage" tabindex="0" role="button" aria-label="Show next logo">
+      <div class="symbol" id="symbol"></div>
+      <div class="lockup" id="lockup">
+        <div class="lock-sym" id="lockSym"></div>
+        <div class="word" id="word"><span class="w1" id="w1">sunday</span><span class="w2">SOLUTIONS</span></div>
+      </div>
+      <span class="hint">Click the logo or use ← → to cycle</span>
+    </div>
+    <div class="meta">
+      <div><h2 id="name"></h2><p id="idea"></p></div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="nav">
+      <button id="prev" type="button">← Prev</button>
+      <button id="next" type="button">Next →</button>
+      <a class="btn" id="dl" download>Download SVG</a>
+      <a class="btn" id="dlLock" download>Download lockup</a>
+    </div>
+  </section>
+  <aside>
+    <div class="group"><h3>Version</h3>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-mode="color" aria-pressed="true">Colour</button>
+        <button type="button" data-mode="mono" aria-pressed="false">One colour</button>
+      </div>
+    </div>
+    <div class="group"><h3>Background</h3>
+      <div class="seg" id="bgSeg">
+        <button type="button" class="swatch" data-bg="#fffefa" data-ink="#16241f" style="background:#fffefa" aria-label="Paper" aria-pressed="true"></button>
+        <button type="button" class="swatch" data-bg="#FBF6E6" data-ink="#1D4338" style="background:#FBF6E6" aria-label="Cream" aria-pressed="false"></button>
+        <button type="button" class="swatch" data-bg="#EFC235" data-ink="#1D4338" style="background:#EFC235" aria-label="Yellow" aria-pressed="false"></button>
+        <button type="button" class="swatch" data-bg="#1D4338" data-ink="#FBF6E6" style="background:#1D4338" aria-label="Green" aria-pressed="false"></button>
+        <button type="button" class="swatch" data-bg="#121614" data-ink="#EFC235" style="background:#121614" aria-label="Night" aria-pressed="false"></button>
+      </div>
+    </div>
+    <div class="group"><h3>Wordmark font</h3>
+      <select id="font">
+        <option value="'DM Sans'">DM Sans (current site font)</option>
+        <option value="'Outfit'" selected>Outfit</option>
+        <option value="'Manrope'">Manrope</option>
+        <option value="'Plus Jakarta Sans'">Plus Jakarta Sans</option>
+        <option value="'Sora'">Sora</option>
+        <option value="'Space Grotesk'">Space Grotesk</option>
+        <option value="'Fraunces'">Fraunces (warm serif)</option>
+        <option value="'Instrument Serif'">Instrument Serif (editorial)</option>
+      </select>
+    </div>
+    <div class="group"><h3>Weight</h3>
+      <div class="seg" id="wSeg">
+        <button type="button" data-w="500" aria-pressed="false">Medium</button>
+        <button type="button" data-w="600" aria-pressed="true">Semibold</button>
+        <button type="button" data-w="700" aria-pressed="false">Bold</button>
+      </div>
+    </div>
+    <div class="group"><h3>Case</h3>
+      <div class="seg" id="caseSeg">
+        <button type="button" data-case="sunday" aria-pressed="true">sunday</button>
+        <button type="button" data-case="Sunday" aria-pressed="false">Sunday</button>
+      </div>
+    </div>
+  </aside>
+</main>
+<div class="thumbs">
+  <h3>Current direction</h3><div class="grid" id="gridCurrent"></div>
+  <h3>Earlier rounds</h3><div class="grid" id="gridArchive"></div>
+</div>
+<script>
+const LOGOS=[
+ {id:"a-sun-cut-s",name:"A · Sun-cut S",idea:"One sun, two horizon cuts — what's left between them is the S of Sunday.",dir:"current"},
+ {id:"b-sundown-screen",name:"B · Sundown Screen",idea:"A laptop with the sun setting on screen: the work's done, the weekend's yours.",dir:"current"},
+ {id:"c-week-rise",name:"C · Week Rise",idea:"Six working days climb; the seventh is the sun.",dir:"current"},
+ {id:"d-half-day-s",name:"D · Half-day S",idea:"The sunrise and its reflection, slipped apart into an S.",dir:"current"},
+ {id:"e-sunday-mode",name:"E · Sunday Mode",idea:"A switch flipped on — the knob is the sun. Automation, switched on.",dir:"current"},
+ {id:"f-sun-path",name:"F · Sun Path",idea:"Seven days cross the sky; the last one is the sun.",dir:"current"},
+ {id:"g-sunrise-prompt",name:"G · Sunrise Prompt",idea:"A terminal where the sun rises off the cursor: your systems, up and running.",dir:"current"},
+ {id:"h-code-sun",name:"H · Code Sun",idea:"</> with the slash cutting through a sun: code, with a Sunday attitude.",dir:"current"},
+ {id:"i-sun-chip",name:"I · Sun Chip",idea:"A microchip with a sunrise at its core: hardware that works so you don't have to.",dir:"current"},
+ {id:"j-network-sun",name:"J · Network Sun",idea:"The sun's rays become connections; every ray ends at a node.",dir:"current"},
+ {id:"r3-a-hammer-ray",name:"Round 3 · Hammer Ray",idea:"Sun rising off a laptop deck; the centre ray is a hammer.",dir:"archive",colorOnly:true},
+ {id:"r3-b-sunday-screen",name:"Round 3 · Sunday Screen",idea:"Sun in the screen, hammer cut from it.",dir:"archive",colorOnly:true},
+ {id:"r3-c-sunrise-s",name:"Round 3 · Sunrise S",idea:"A geometric S whose top bowl is the sun.",dir:"archive",colorOnly:true},
+ {id:"r4-hunter-sunrise",name:"Round 4 · Hunter Sunrise",idea:"Engraved emblem: sun over vineyard hills.",dir:"archive",colorOnly:true},
+ {id:"r4-seventh-day",name:"Round 4 · Seventh Day",idea:"Engraved half-sun, seven rays, harbour reflection.",dir:"archive",colorOnly:true},
+ {id:"r4-sunset-s",name:"Round 4 · Sunset S",idea:"Striped S set in a sun with fine rays.",dir:"archive",colorOnly:true},
+ {id:"r2-1-monoline",name:"Round 2 · Monoline",idea:"Monoline sunrise in a laptop screen.",dir:"archive",colorOnly:true},
+ {id:"r2-2-sunburst",name:"Round 2 · Sunburst",idea:"Solid half-sun with tapered rays.",dir:"archive",colorOnly:true},
+ {id:"r2-3-sunrise-display",name:"Round 2 · Sunrise Display",idea:"Sunburst on a solid laptop screen.",dir:"archive",colorOnly:true},
+];
+const $=s=>document.querySelector(s);
+const state={i:0,mode:"color"};
+try{const s=JSON.parse(localStorage.getItem("ss-logo-explorer")||"{}");Object.assign(state,s)}catch(e){}
+const cache={};
+async function svgText(url,mono){
+  const key=url+mono; if(cache[key]) return cache[key];
+  let t=await (await fetch(url)).text();
+  if(mono) t=t.replace(/#111111/gi,"currentColor");
+  t=t.replace(/<svg\b[^>]*>/,m=>m.replace(/\s(width|height)="\d+"/g,""));
+  return cache[key]=t;
+}
+const fileFor=(l,mono)=>`svg/${l.dir}/${l.id}${(!mono&&!l.colorOnly)?"-color":""}.svg`;
+async function render(){
+  const l=LOGOS[(state.i+LOGOS.length)%LOGOS.length];
+  const mono=state.mode==="mono"&&!l.colorOnly;
+  const s=await svgText(fileFor(l,mono),mono);
+  $("#symbol").innerHTML=s;
+  $("#lockSym").innerHTML=l.colorOnly?s:await svgText(fileFor(l,true),true);
+  $("#name").textContent=l.name; $("#idea").textContent=l.idea+(l.colorOnly&&state.mode==="mono"?" (colour only)":"");
+  $("#count").textContent=`${(state.i%LOGOS.length)+1} / ${LOGOS.length}`;
+  $("#dl").href=fileFor(l,mono); $("#dl").download=`sunday-solutions-${l.id}.svg`;
+  const lk=$("#dlLock"); if(l.dir==="current"){lk.hidden=false;lk.href=`svg/current/${l.id}-lockup.svg`;lk.download=`sunday-solutions-${l.id}-lockup.svg`}else lk.hidden=true;
+  document.querySelectorAll(".thumb").forEach((t,j)=>t.setAttribute("aria-current",j===state.i?"true":"false"));
+  try{localStorage.setItem("ss-logo-explorer",JSON.stringify({i:state.i,mode:state.mode}))}catch(e){}
+}
+function go(d){state.i=(state.i+d+LOGOS.length)%LOGOS.length;render()}
+$("#stage").addEventListener("click",()=>go(1));
+$("#stage").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go(1)}});
+document.addEventListener("keydown",e=>{if(e.target.tagName==="SELECT")return;if(e.key==="ArrowRight")go(1);if(e.key==="ArrowLeft")go(-1)});
+$("#next").onclick=()=>go(1); $("#prev").onclick=()=>go(-1);
+function seg(id,fn){const el=$(id);el.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));fn(b)})}
+seg("#modeSeg",b=>{state.mode=b.dataset.mode;render()});
+seg("#bgSeg",b=>{document.documentElement.style.setProperty("--stage",b.dataset.bg);document.documentElement.style.setProperty("--mark",b.dataset.ink)});
+seg("#wSeg",b=>{$("#word").style.fontWeight=b.dataset.w;$("#w1").style.fontWeight=b.dataset.w});
+seg("#caseSeg",b=>{$("#w1").textContent=b.dataset.case});
+$("#font").addEventListener("change",e=>{$("#word").style.fontFamily=e.target.value+",system-ui,sans-serif";const serif=/Fraunces|Instrument/.test(e.target.value);$("#w1").style.letterSpacing=serif?"-.01em":"-.02em"});
+$("#word").style.fontFamily="'Outfit',system-ui,sans-serif";
+document.querySelectorAll("#modeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===state.mode?"true":"false"));
+LOGOS.forEach((l,j)=>{
+  const b=document.createElement("button");b.type="button";b.className="thumb";
+  b.innerHTML=`<span class="t"><img src="${fileFor(l,false)}" alt=""></span><span>${l.name.split(" · ")[1]}</span>`;
+  b.onclick=()=>{state.i=j;render();$("#stage").scrollIntoView({behavior:"smooth",block:"center"})};
+  $(l.dir==="current"?"#gridCurrent":"#gridArchive").appendChild(b);
+});
+render();
+</script>
+</body>
+</html>
