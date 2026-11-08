@@ -37,6 +37,7 @@ main{max-width:1180px;margin:0 auto;padding:24px clamp(16px,4vw,40px) 64px;displ
 .nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 button,.btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 button:hover,.btn:hover{border-color:#bdbcb0}
+.btn-site{background:var(--yellow);border-color:var(--yellow);color:var(--green);font-weight:700}.btn-site[aria-disabled="true"]{opacity:.45;pointer-events:none}
 button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
 aside{display:flex;flex-direction:column;gap:22px}
 .group h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
@@ -75,6 +76,7 @@ select{width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--lin
     <div class="nav">
       <button id="prev" type="button">← Prev</button>
       <button id="next" type="button">Next →</button>
+      <a class="btn btn-site" id="onSite">See it on the site →</a>
       <a class="btn" id="dl" download>Download SVG</a>
       <a class="btn" id="dlLock" download>Download lockup</a>
     </div>
@@ -169,6 +171,9 @@ async function render(){
   $("#name").textContent=l.name; $("#idea").textContent=l.idea+(l.colorOnly&&state.mode==="mono"?" (colour only)":"");
   $("#count").textContent=`${(state.i%LOGOS.length)+1} / ${LOGOS.length}`;
   $("#dl").href=fileFor(l,mono); $("#dl").download=`sunday-solutions-${l.id}.svg`;
+  const os=$("#onSite"),font=$("#font").value.replace(/'/g,"");
+  if(l.dir==="current"){os.href=`../?logo=${l.id}&font=${encodeURIComponent(font)}`;os.removeAttribute("aria-disabled");os.title=""}
+  else{os.removeAttribute("href");os.setAttribute("aria-disabled","true");os.title="Only the current direction can be previewed on the site"}
   const lk=$("#dlLock"); if(l.dir==="current"){lk.hidden=false;lk.href=`svg/current/${l.id}-lockup.svg`;lk.download=`sunday-solutions-${l.id}-lockup.svg`}else lk.hidden=true;
   document.querySelectorAll(".thumb").forEach((t,j)=>t.setAttribute("aria-current",j===state.i?"true":"false"));
   try{localStorage.setItem("ss-logo-explorer",JSON.stringify({i:state.i,mode:state.mode}))}catch(e){}
@@ -183,7 +188,7 @@ seg("#modeSeg",b=>{state.mode=b.dataset.mode;render()});
 seg("#bgSeg",b=>{document.documentElement.style.setProperty("--stage",b.dataset.bg);document.documentElement.style.setProperty("--mark",b.dataset.ink)});
 seg("#wSeg",b=>{$("#word").style.fontWeight=b.dataset.w;$("#w1").style.fontWeight=b.dataset.w});
 seg("#caseSeg",b=>{$("#w1").textContent=b.dataset.case});
-$("#font").addEventListener("change",e=>{$("#word").style.fontFamily=e.target.value+",system-ui,sans-serif";const serif=/Fraunces|Instrument/.test(e.target.value);$("#w1").style.letterSpacing=serif?"-.01em":"-.02em"});
+$("#font").addEventListener("change",e=>{render();$("#word").style.fontFamily=e.target.value+",system-ui,sans-serif";const serif=/Fraunces|Instrument/.test(e.target.value);$("#w1").style.letterSpacing=serif?"-.01em":"-.02em"});
 $("#word").style.fontFamily="'Outfit',system-ui,sans-serif";
 document.querySelectorAll("#modeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===state.mode?"true":"false"));
 LOGOS.forEach((l,j)=>{
