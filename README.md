@@ -25,6 +25,8 @@ The contact email `hello@sundaysolutions.com.au`, 6+ years experience, 24-hour q
 
 `dist/logos/` (live at `/logos/`) holds the logo concepts as SVG (`svg/current/` for the active direction: symbol, colour tile and lockup per concept; `svg/archive/` for earlier rounds) and a viewer page: click the logo or use the arrow keys to cycle, switch colour/one-colour, background, and preview the wordmark in matching fonts. Page is `noindex`.
 
+**Preview on the real site:** the explorer's *See it on the site* button opens `/?logo=<id>&font=<font>`. `dist/brand.js` swaps the header, promise-board and footer marks plus the favicon, shows a small picker (cycle logos, change wordmark font) and remembers the choice in that browser. Ordinary visitors see the default logo; `/?logo=original` resets.
+
 ## Validation
 
 JavaScript syntax, referenced assets, unique element IDs and section anchors checked. Browser checks covered desktop, 390px mobile and 768px tablet views, service-category preselection, enquiry draft generation, FAQ expansion, privacy dialog and mobile navigation.
