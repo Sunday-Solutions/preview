@@ -1,6 +1,7 @@
 // Homepage extras: header on scroll, the grass and fireflies, and the "give me a report" AI demo.
-// The demo has two examples that take turns: a diagram of the monthly report, and a chat that does the
-// report then a stocktake from a photo. The tabs on the card jump to one; ?demo=chat starts with the chat.
+// The demo has two examples that take turns: a chat (stocktake from a photo with an Ordermentum reorder,
+// then the monthly report) and a diagram of the monthly report. The tabs on the card jump to one.
+// Click the Sunday AI logo on the card for demo settings (saved in that browser only).
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);
   const NS = 'http://www.w3.org/2000/svg';
@@ -56,7 +57,30 @@
   if (!demo) return;
   const win = $('.ai-window', demo), body = $('#ai-body'), status = $('#ai-status');
 
-  const PROMPT = "Give me this month's report";
+  const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+
+  // ---- Demo settings (editable by clicking the Sunday AI logo on the card; see openSettings) ----
+  const SETTINGS_KEY = 'ss-demo-settings';
+  const DEFAULTS = {
+    startWith: 'chat',            // which example plays first: 'chat' or 'flow' (the diagram)
+    chatFirst: 'stock',           // in the chat, do the stocktake or the report first: 'stock' or 'report'
+    stockAsk: 'Count all these boxes and save it to our inventory',
+    reportAsk: "Give me this month's report",
+    supplier: 'Harbour Wholesale',
+    delivery: 'Thursday',
+    items: [{ name: 'Bleach 12 × 1L', qty: 2, price: 19.2 }, { name: 'Sardines in tomato sauce 50 × 155g', qty: 3, price: 47.5 }],
+  };
+  let S = clone(DEFAULTS);
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || 'null');
+    if (saved && typeof saved === 'object') {
+      ['startWith', 'chatFirst', 'stockAsk', 'reportAsk', 'supplier', 'delivery'].forEach((k) => { if (typeof saved[k] === 'string' && saved[k]) S[k] = saved[k]; });
+      if (Array.isArray(saved.items) && saved.items.length) {
+        S.items = saved.items.slice(0, 4).map((it) => ({ name: String(it.name || 'Item'), qty: Math.max(1, Math.min(99, Number(it.qty) || 1)), price: Math.max(0, Number(it.price) || 0) }));
+      }
+    }
+  } catch (e) { /* storage unavailable or bad data: use the defaults */ }
   const MONTH = new Date().toLocaleDateString('en-AU', { month: 'long' });
   const SOURCES = [
     { k: 'gmail', name: 'Gmail', ic: 'i-mail', ask: 'emails since the 1st', got: '38 emails' },
@@ -74,6 +98,7 @@
     calendar: '<svg viewBox="0 0 48 48"><path fill="#4285F4" d="M10 6h28a4 4 0 0 1 4 4v26h-6v6H10a4 4 0 0 1-4-4V10a4 4 0 0 1 4-4z"/><path fill="#FBBC04" d="M6 12h6v24H6z"/><path fill="#34A853" d="M12 36h24v6H12z"/><path fill="#188038" d="M6 36h6v6h-2a4 4 0 0 1-4-4z"/><path fill="#1967D2" d="M36 6h2a4 4 0 0 1 4 4v2h-6z"/><path fill="#EA4335" d="M36 36h6l-6 6z"/><rect x="12" y="12" width="24" height="24" fill="#fff"/><text x="24" y="30" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="700" fill="#4285F4">31</text></svg>',
     sheets: '<svg viewBox="0 0 48 48"><path fill="#0F9D58" d="M37 45H11a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h19l10 10v29a3 3 0 0 1-3 3z"/><path fill="#87CEAC" d="M40 13H30V3z"/><path fill="#0B7A43" d="M30 13l10 10V13z"/><path fill="#F1F8F4" d="M15 23h18v14H15zm2 2v2h4v-2zm6 0v2h8v-2zm-6 4v2h4v-2zm6 0v2h8v-2zm-6 4v2h4v-2zm6 0v2h8v-2z"/></svg>',
   };
+  LOGOS.ordermentum = '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="19.5" fill="none" stroke="#F26A2B" stroke-width="5"/><path d="M15.5 32V17.5l8.5 8.5 8.5-8.5V32" fill="none" stroke="#F26A2B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const appIcon = (s, cls) => `<span class="${cls} is-logo">${LOGOS[s.k]}</span>`;
 
   // ---- Shared timing helpers. Bumping `run` cancels whatever is playing. ----
@@ -235,10 +260,10 @@
 
       // 1. The request
       setStatus('listening', 'Listening');
-      await typeInto(els.typed, els.placeholder, PROMPT, id);
+      await typeInto(els.typed, els.placeholder, S.reportAsk, id);
       await pressSend(els.box, id);
       const t0 = performance.now();
-      log('you', `› ${PROMPT}`);
+      log('you', `› ${esc(S.reportAsk)}`);
       wireState('prompt', 'is-on');
       await packet(els.wires.prompt, { dur: 520, kind: 'req' }, id);
       wireState('prompt', 'is-done');
@@ -320,7 +345,7 @@
       SOURCES.forEach((s) => sub(s.k, s.got));
       sub('pdf', '4 pages · ready'); sub('print', 'printed'); sub('email', 'sent to 3 people');
       els.log.innerHTML = '';
-      log('you', `› ${PROMPT}`);
+      log('you', `› ${esc(S.reportAsk)}`);
       SOURCES.forEach((s) => log('in', `← <b>${s.name}</b> sent ${s.got.toLowerCase()}`));
       log('out', '→ emailed <b>Sam</b>, <b>Alex</b> and <b>Jordan</b>');
       setStatus('done', 'Done');
@@ -331,14 +356,14 @@
   })();
 
   // =====================================================================
-  //  Version 2: Chat. Two requests in one conversation: this month's report, then a
-  //  stocktake from a photo (the AI counts every box and saves it to the inventory).
+  //  Version 2: Chat. Two requests in one conversation (order set in the demo settings):
+  //  a stocktake from a photo (count every box, save it to the inventory, reorder the
+  //  low stock on Ordermentum) and this month's report.
   //  Photo: "Cardboard box lot" by CHUTTERSNAP on Unsplash (Unsplash License).
   // =====================================================================
   const chat = (() => {
     const SOURCE_MS = [1500, 2100, 1250, 1800];
     const PHOTO = 'assets/stocktake-boxes.jpg';
-    const ASK = 'Count all these boxes and save it to our inventory';
     // Each box in the photo, as x, y, width, height on the 900 x 601 image.
     const BOXES = [
       [5, 25, 177, 147], [155, 0, 125, 82], [180, 82, 98, 63], [287, 15, 153, 72], [282, 84, 158, 50], [288, 118, 170, 128],
@@ -352,8 +377,12 @@
     const TOTAL = BOXES.length;
     const CATEGORIES = [['Rice and grains', 9], ['Canned and jarred', 8], ['Sauces', 6], ['Snacks and drinks', 7], ['Cleaning', 3]];
     CATEGORIES.push(['Other', TOTAL - CATEGORIES.reduce((n, [, c]) => n + c, 0)]);
-    const LOW = 'Bleach, Sardines';
+    const ORDER_NO = 'OM-48213';
     const head = (text) => `<div class="msg-head"><img src="assets/logo-mark.svg" alt=""><span class="head-text">${text}</span></div>`;
+    const firstWord = (s) => esc(String(s).trim().split(/\s+/)[0] || s);
+    const lowList = () => S.items.map((it) => firstWord(it.name)).join(', ');
+    const money = (n) => `$${n.toFixed(2)}`;
+    const orderTotal = () => S.items.reduce((n, it) => n + it.qty * it.price, 0);
     let els = null;
 
     const build = () => {
@@ -365,6 +394,7 @@
     };
     const add = (html) => { const tmp = document.createElement('div'); tmp.innerHTML = html.trim(); const el = tmp.firstElementChild; els.feed.appendChild(el); return el; };
 
+    // ---- Monthly report messages ----
     const sourcesHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Got everything.' : 'Pulling it all together…')}<div class="sources">${SOURCES.map((s) =>
       `<div class="src${done ? ' is-done' : ''}" style="--p:${done ? 100 : 0}%">${appIcon(s, 'src-ic')}<span class="src-name">${s.name}<span class="src-detail">${done ? s.got : 'connecting…'}</span></span><span class="src-state"></span></div>`).join('')}</div></div>`;
     const reportHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Report written.' : 'Writing your report')}<div class="progress"><i style="width:${done ? 100 : 0}%"></i></div>
@@ -380,7 +410,8 @@
     const sentHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Done. Report sent.' : 'Emailing the people who need it…')}<div class="people">${PEOPLE.map(([ini, name, role, c]) =>
       `<span class="person${done ? ' on' : ''}"><i style="--c:${c}">${ini}</i>${name} · ${role} ${icon('i-check')}</span>`).join('')}</div><p class="sent-note${done ? ' on' : ''}">Sent to 3 people · 9:02am</p></div>`;
 
-    const askHtml = () => `<div class="msg msg-user msg-photo"><img src="${PHOTO}" alt=""><span>${ASK}</span></div>`;
+    // ---- Stocktake messages ----
+    const askHtml = () => `<div class="msg msg-user msg-photo"><img src="${PHOTO}" alt=""><span>${esc(S.stockAsk)}</span></div>`;
     const countHtml = (done) => `<div class="msg msg-ai">${head(done ? `Counted ${TOTAL} boxes.` : 'Counting boxes…')}
       <div class="scan"><img src="${PHOTO}" alt="">
         <svg viewBox="0 0 900 601" preserveAspectRatio="none"><defs><linearGradient id="scan-grad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9be58b" stop-opacity="0"/><stop offset="1" stop-color="#9be58b" stop-opacity=".55"/></linearGradient></defs>
@@ -391,14 +422,19 @@
     const invHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Inventory updated.' : 'Saving to your inventory…')}
       <div class="inv"><div class="inv-head"><span class="inv-ic">${icon('i-grid')}</span><b>Inventory</b><small>Stockroom · today</small></div>
         ${CATEGORIES.map(([name, n]) => `<div class="inv-row${done ? ' on' : ''}"><span>${name}</span><b>${n} boxes</b><i></i></div>`).join('')}
-        <div class="inv-low${done ? ' on' : ''}">Low stock: ${LOW}</div>
+        <div class="inv-low${done ? ' on' : ''}">Low stock: ${lowList()}</div>
       </div></div>`;
-    const savedHtml = () => `<div class="msg msg-ai"><div class="pdf"><span class="stock-ic">${icon('i-check')}</span><span><b>Stocktake saved</b><small>${TOTAL} boxes · ${CATEGORIES.length} categories · 2 low</small></span><span class="pdf-ready">Saved</span></div>
-      <div class="acts"><span class="act" data-act="view">${icon('i-grid')} View inventory</span><span class="act act-primary" data-act="order">${icon('i-invoice')} Reorder low stock</span></div></div>`;
-    const orderHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Draft order ready.' : 'Drafting an order…')}<div class="people">
-      <span class="person${done ? ' on' : ''}"><i style="--c:#f5ca45">B</i>Bleach · 2 cartons ${icon('i-check')}</span>
-      <span class="person${done ? ' on' : ''}"><i style="--c:#8fd3ff">S</i>Sardines · 3 cartons ${icon('i-check')}</span></div>
-      <p class="sent-note${done ? ' on' : ''}">Waiting for your OK before it goes to the supplier</p></div>`;
+    const savedHtml = () => `<div class="msg msg-ai"><div class="pdf"><span class="stock-ic">${icon('i-check')}</span><span><b>Stocktake saved</b><small>${TOTAL} boxes · ${CATEGORIES.length} categories · ${S.items.length} low</small></span><span class="pdf-ready">Saved</span></div>
+      <div class="acts"><span class="act" data-act="view">${icon('i-grid')} View inventory</span><span class="act act-primary" data-act="order"><span class="mini-logo is-logo">${LOGOS.ordermentum}</span> Reorder on Ordermentum</span></div></div>`;
+    const omHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Order placed on Ordermentum.' : 'Making the order on Ordermentum…')}
+      <div class="om${done ? ' is-placed' : ''}">
+        <div class="om-head"><span class="om-logo is-logo">${LOGOS.ordermentum}</span><b>Ordermentum</b><small>${done ? `Order #${ORDER_NO}` : 'New order'}</small></div>
+        <div class="om-supplier"><span>Supplier</span><b>${esc(S.supplier)}</b></div>
+        ${S.items.map((it) => `<div class="om-row${done ? ' on' : ''}"><span>${esc(it.name)}</span><em>× <b class="om-qty">${done ? it.qty : 0}</b></em><b class="om-price">${money(done ? it.qty * it.price : 0)}</b></div>`).join('')}
+        <div class="om-total"><span>Total (ex GST)</span><b>${money(done ? orderTotal() : 0)}</b></div>
+        <div class="om-foot"><span class="om-delivery">Delivery ${esc(S.delivery)}</span><span class="act act-om${done ? ' is-done' : ''}" data-act="place">${done ? `${icon('i-check')} Order placed` : 'Place order'}</span></div>
+      </div>
+      <p class="sent-note${done ? ' on' : ''}">Sent to ${esc(S.supplier)} · arriving ${esc(S.delivery)}</p></div>`;
 
     const reset = () => {
       els.feed.innerHTML = '';
@@ -420,14 +456,98 @@
       els.cursor.style.transform = `translate(${r.left - br.left + r.width * 0.55}px, ${r.top - br.top + r.height * 0.45}px)`;
       await wait(880, id);
     };
+    const click = async (el, id) => {
+      await moveCursorTo(el, id);
+      el.classList.add('is-pressed');
+      await wait(200, id);
+      el.classList.remove('is-pressed');
+      els.cursor.classList.remove('is-on');
+    };
 
-    const play = async (id) => {
-      reset();
-      await wait(800, id);
+    // ---- Example: stocktake from a photo, then reorder on Ordermentum ----
+    const doStocktake = async (id) => {
       setStatus('listening', 'Listening');
-      await typeInto(els.typed, els.placeholder, PROMPT, id);
+      els.placeholder.classList.add('is-hidden');
+      els.attach.classList.add('on');
+      await wait(450, id);
+      await typeInto(els.typed, els.placeholder, S.stockAsk, id);
       await pressSend(els.box, id);
-      add(`<div class="msg msg-user">${PROMPT}</div>`);
+      els.attach.classList.remove('on');
+      add(askHtml());
+      await wait(500, id);
+
+      // Count every box, sweeping down the photo
+      setStatus('working', 'Counting');
+      const countMsg = add(countHtml(false));
+      const rects = [...countMsg.querySelectorAll('.bx')];
+      const line = $('.scan-line', countMsg), num = $('.scan-count b', countMsg);
+      let counted = 0;
+      await frames(2700, id, (p) => {
+        const y = p * 661 - 60;
+        line.setAttribute('y', y.toFixed(1));
+        BOXES.forEach(([, by, , bh], i) => {
+          if (!rects[i].classList.contains('on') && by + bh / 2 <= y + 60) { rects[i].classList.add('on'); counted++; num.textContent = counted; }
+        });
+      });
+      rects.forEach((r) => r.classList.add('on'));
+      num.textContent = TOTAL;
+      line.setAttribute('y', '-60');
+      $('.head-text', countMsg).textContent = `Counted ${TOTAL} boxes.`;
+      await wait(450, id);
+
+      // Save the count to the inventory
+      setStatus('working', 'Saving');
+      const invMsg = add(invHtml(false));
+      for (const row of invMsg.querySelectorAll('.inv-row')) { await wait(230, id); row.classList.add('on'); }
+      await wait(250, id);
+      $('.inv-low', invMsg).classList.add('on');
+      $('.head-text', invMsg).textContent = 'Inventory updated.';
+      await wait(500, id);
+
+      const savedMsg = add(savedHtml());
+      setStatus('done', 'Saved');
+      await wait(900, id);
+      await click($('[data-act="order"]', savedMsg), id);
+
+      // Make the order on Ordermentum: supplier, items and quantities fill in, then Place order
+      setStatus('working', 'Ordering');
+      const omMsg = add(omHtml(false));
+      const rows = [...omMsg.querySelectorAll('.om-row')];
+      const totalEl = $('.om-total b', omMsg);
+      let running = 0;
+      for (let i = 0; i < rows.length; i++) {
+        const it = S.items[i];
+        await wait(350, id);
+        rows[i].classList.add('on');
+        const qtyEl = $('.om-qty', rows[i]), priceEl = $('.om-price', rows[i]);
+        const step = Math.max(1, Math.ceil(it.qty / 6));
+        for (let n = step; ; n = Math.min(it.qty, n + step)) {
+          await wait(150, id);
+          qtyEl.textContent = n;
+          priceEl.textContent = money(n * it.price);
+          totalEl.textContent = money(running + n * it.price);
+          if (n >= it.qty) break;
+        }
+        running += it.qty * it.price;
+      }
+      await wait(500, id);
+      const place = $('[data-act="place"]', omMsg);
+      await click(place, id);
+      place.classList.add('is-done');
+      place.innerHTML = `${icon('i-check')} Order placed`;
+      $('.om', omMsg).classList.add('is-placed');
+      $('.om-head small', omMsg).textContent = `Order #${ORDER_NO}`;
+      $('.head-text', omMsg).textContent = 'Order placed on Ordermentum.';
+      $('.sent-note', omMsg).classList.add('on');
+      setStatus('done', 'Done');
+    };
+
+    // ---- Example: this month's report ----
+    const doReport = async (id) => {
+      setStatus('listening', 'Listening');
+      await typeInto(els.typed, els.placeholder, S.reportAsk, id);
+      await pressSend(els.box, id);
+      add(`<div class="msg msg-user">${esc(S.reportAsk)}</div>`);
       await wait(520, id);
 
       setStatus('working', 'Working');
@@ -461,12 +581,7 @@
       const pdfMsg = add(pdfHtml());
       setStatus('done', 'PDF ready');
       await wait(1000, id);
-      const emailBtn = $('[data-act="email"]', pdfMsg);
-      await moveCursorTo(emailBtn, id);
-      emailBtn.classList.add('is-pressed');
-      await wait(200, id);
-      emailBtn.classList.remove('is-pressed');
-      els.cursor.classList.remove('is-on');
+      await click($('[data-act="email"]', pdfMsg), id);
 
       setStatus('working', 'Sending');
       const sentMsg = add(sentHtml(false));
@@ -475,82 +590,26 @@
       $('.head-text', sentMsg).textContent = 'Done. Report sent.';
       $('.sent-note', sentMsg).classList.add('on');
       setStatus('done', 'Done');
+    };
+
+    const order = () => (S.chatFirst === 'report' ? [doReport, doStocktake] : [doStocktake, doReport]);
+    const play = async (id) => {
+      reset();
+      await wait(800, id);
+      const [first, second] = order();
+      await first(id);
       await wait(2200, id);
-
-      // Example 2, part 1: attach a photo of the stockroom and ask
-      setStatus('listening', 'Listening');
-      els.placeholder.classList.add('is-hidden');
-      els.attach.classList.add('on');
-      await wait(450, id);
-      await typeInto(els.typed, els.placeholder, ASK, id);
-      await pressSend(els.box, id);
-      els.attach.classList.remove('on');
-      add(askHtml());
-      await wait(500, id);
-
-      // Part 2: count every box, sweeping down the photo
-      setStatus('working', 'Counting');
-      const countMsg = add(countHtml(false));
-      const rects = [...countMsg.querySelectorAll('.bx')];
-      const line = $('.scan-line', countMsg), num = $('.scan-count b', countMsg);
-      let counted = 0;
-      await frames(2700, id, (p) => {
-        const y = p * 661 - 60;
-        line.setAttribute('y', y.toFixed(1));
-        BOXES.forEach(([, by, , bh], i) => {
-          if (!rects[i].classList.contains('on') && by + bh / 2 <= y + 60) { rects[i].classList.add('on'); counted++; num.textContent = counted; }
-        });
-      });
-      rects.forEach((r) => r.classList.add('on'));
-      num.textContent = TOTAL;
-      line.setAttribute('y', '-60');
-      $('.head-text', countMsg).textContent = `Counted ${TOTAL} boxes.`;
-      await wait(450, id);
-
-      // Part 3: save the count to the inventory
-      setStatus('working', 'Saving');
-      const invMsg = add(invHtml(false));
-      for (const row of invMsg.querySelectorAll('.inv-row')) { await wait(230, id); row.classList.add('on'); }
-      await wait(250, id);
-      $('.inv-low', invMsg).classList.add('on');
-      $('.head-text', invMsg).textContent = 'Inventory updated.';
-      await wait(500, id);
-
-      // Part 4: saved, with a one-click reorder
-      const savedMsg = add(savedHtml());
-      setStatus('done', 'Saved');
-      await wait(900, id);
-      const orderBtn = $('[data-act="order"]', savedMsg);
-      await moveCursorTo(orderBtn, id);
-      orderBtn.classList.add('is-pressed');
-      await wait(200, id);
-      orderBtn.classList.remove('is-pressed');
-      els.cursor.classList.remove('is-on');
-
-      setStatus('working', 'Ordering');
-      const orderMsg = add(orderHtml(false));
-      for (const item of orderMsg.querySelectorAll('.person')) { await wait(380, id); item.classList.add('on'); }
-      await wait(300, id);
-      $('.head-text', orderMsg).textContent = 'Draft order ready.';
-      $('.sent-note', orderMsg).classList.add('on');
-      setStatus('done', 'Done');
+      await second(id);
       await wait(3400, id);
       win.classList.add('is-fading');
       await wait(650, id);
     };
 
+    const finalStock = () => { add(askHtml()); add(countHtml(true)); add(invHtml(true)); add(savedHtml()); add(omHtml(true)); };
+    const finalReport = () => { add(`<div class="msg msg-user">${esc(S.reportAsk)}</div>`); add(sourcesHtml(true)); add(reportHtml(true)); add(pdfHtml()); add(sentHtml(true)); };
     const final = () => {
       reset();
-      add(`<div class="msg msg-user">${PROMPT}</div>`);
-      add(sourcesHtml(true));
-      add(reportHtml(true));
-      add(pdfHtml());
-      add(sentHtml(true));
-      add(askHtml());
-      add(countHtml(true));
-      add(invHtml(true));
-      add(savedHtml());
-      add(orderHtml(true));
+      if (S.chatFirst === 'report') { finalReport(); finalStock(); } else { finalStock(); finalReport(); }
       setStatus('done', 'Done');
     };
     const destroy = () => { els = null; };
@@ -560,12 +619,12 @@
   // =====================================================================
   //  Switching between versions, and only animating while on screen
   // =====================================================================
-  // The two examples take turns: Diagram, then Chat, then round again. When one
+  // The two examples take turns (which goes first is in the demo settings). When one
   // finishes it fades out and the next plays. The active tab fills up as its example plays.
   // Clicking a tab jumps straight to that example, and the turns carry on from there.
   const DEMOS = { flow, chat };
   const ORDER = ['flow', 'chat'];
-  const ROUGH_MS = { flow: 16500, chat: 32000 };   // roughly how long each one plays
+  const ROUGH_MS = { flow: 16500, chat: 37000 };   // roughly how long each one plays
   const next = (name) => ORDER[(ORDER.indexOf(name) + 1) % ORDER.length];
   const tabs = [...demo.querySelectorAll('.ai-switch button')];
   let current = null;
@@ -606,21 +665,103 @@
       }
     } catch (e) { if (e !== STOP && id === run) throw e; }
   }
-  const sync = () => { if (reduceMotion) return; if (inView && !document.hidden) start(); else if (playing) stop(); };
+  // ?static=1 shows each example's finished state with no animation (handy for screenshots).
+  const staticMode = reduceMotion || new URLSearchParams(window.location.search).has('static');
+  const sync = () => { if (staticMode) return; if (inView && !document.hidden) start(); else if (playing) stop(); };
 
   const use = (name) => {
     if (!DEMOS[name]) name = 'flow';
     stop();
     win.classList.remove('is-fading');
     show(name);
-    if (reduceMotion) DEMOS[name].final(); else sync();
+    if (staticMode) DEMOS[name].final(); else sync();
   };
 
   tabs.forEach((b) => b.addEventListener('click', () => use(b.dataset.demo)));
 
-  // ?demo=chat starts with the chat example (handy for showing someone); otherwise the diagram goes first.
+  // ?demo=chat or ?demo=flow picks the first example (handy for showing someone); otherwise the settings decide.
   const fromUrl = new URLSearchParams(window.location.search).get('demo');
-  use(fromUrl && DEMOS[fromUrl] ? fromUrl : 'flow');
+  use(fromUrl && DEMOS[fromUrl] ? fromUrl : S.startWith);
+
+  // =====================================================================
+  //  Demo settings: click the Sunday AI logo on the card. Saved in this browser only, so
+  //  you can tailor the demo before showing someone. Visitors always see the defaults.
+  // =====================================================================
+  const openSettings = () => {
+    let dlg = $('#demo-settings');
+    if (!dlg) {
+      dlg = document.createElement('dialog');
+      dlg.id = 'demo-settings';
+      dlg.className = 'demo-settings';
+      dlg.setAttribute('aria-labelledby', 'demo-settings-title');
+      dlg.addEventListener('click', (e) => {
+        const b = dlg.getBoundingClientRect();
+        if (e.target === dlg && (e.clientX < b.left || e.clientX > b.right || e.clientY < b.top || e.clientY > b.bottom)) dlg.close();
+      });
+      document.body.appendChild(dlg);
+    }
+    const itemRow = (it = { name: '', qty: 1, price: 0 }) => `<div class="ds-item">
+      <input name="iname" value="${esc(it.name)}" placeholder="Product" maxlength="60" aria-label="Product">
+      <input name="iqty" type="number" min="1" max="99" value="${it.qty}" aria-label="Quantity">
+      <input name="iprice" type="number" min="0" step="0.01" value="${it.price}" aria-label="Price each">
+      <button type="button" class="ds-remove" aria-label="Remove this item">×</button></div>`;
+    dlg.innerHTML = `<form class="ds-form">
+      <button class="dialog-close" type="button" aria-label="Close demo settings">×</button>
+      <p class="kicker">Demo settings</p>
+      <h2 id="demo-settings-title">Tweak the demo</h2>
+      <p class="ds-note">Saved in this browser only, so you can tailor it before showing someone. Visitors always see the defaults.</p>
+      <fieldset><legend>Start with</legend><label><input type="radio" name="startWith" value="chat"> Chat</label><label><input type="radio" name="startWith" value="flow"> Diagram</label></fieldset>
+      <fieldset><legend>In the chat, do this first</legend><label><input type="radio" name="chatFirst" value="stock"> Stocktake</label><label><input type="radio" name="chatFirst" value="report"> Monthly report</label></fieldset>
+      <label class="ds-field">Stocktake request<input name="stockAsk" maxlength="80"></label>
+      <label class="ds-field">Report request<input name="reportAsk" maxlength="80"></label>
+      <div class="ds-row"><label class="ds-field">Supplier on Ordermentum<input name="supplier" maxlength="40"></label><label class="ds-field">Delivery day<input name="delivery" maxlength="20"></label></div>
+      <div class="ds-items-head"><span>Order items</span><span>Qty</span><span>$ each</span><span></span></div>
+      <div class="ds-items">${S.items.map(itemRow).join('')}</div>
+      <button type="button" class="link-button ds-add">+ Add an item</button>
+      <div class="ds-actions"><button type="button" class="btn btn-ghost ds-reset">Reset to default</button><button type="submit" class="btn btn-sun">Save and replay</button></div>
+    </form>`;
+    const f = $('form', dlg), items = $('.ds-items', dlg);
+    f.startWith.value = S.startWith;
+    f.chatFirst.value = S.chatFirst;
+    ['stockAsk', 'reportAsk', 'supplier', 'delivery'].forEach((k) => { f[k].value = S[k]; });
+    const tidy = () => {
+      $('.ds-add', dlg).hidden = items.children.length >= 4;
+      items.querySelectorAll('.ds-remove').forEach((b) => { b.disabled = items.children.length <= 1; });
+    };
+    items.addEventListener('click', (e) => { const rm = e.target.closest('.ds-remove'); if (rm) { rm.closest('.ds-item').remove(); tidy(); } });
+    $('.ds-add', dlg).addEventListener('click', () => { items.insertAdjacentHTML('beforeend', itemRow()); tidy(); });
+    tidy();
+    $('.dialog-close', dlg).addEventListener('click', () => dlg.close());
+    $('.ds-reset', dlg).addEventListener('click', () => {
+      S = clone(DEFAULTS);
+      try { localStorage.removeItem(SETTINGS_KEY); } catch (e) { /* storage unavailable */ }
+      dlg.close();
+      use(S.startWith);
+    });
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rows = [...items.querySelectorAll('.ds-item')].map((r) => ({
+        name: $('[name="iname"]', r).value.trim(),
+        qty: Math.max(1, Math.min(99, parseInt($('[name="iqty"]', r).value, 10) || 1)),
+        price: Math.max(0, parseFloat($('[name="iprice"]', r).value) || 0),
+      })).filter((r) => r.name);
+      S = {
+        startWith: f.startWith.value === 'flow' ? 'flow' : 'chat',
+        chatFirst: f.chatFirst.value === 'report' ? 'report' : 'stock',
+        stockAsk: f.stockAsk.value.trim() || DEFAULTS.stockAsk,
+        reportAsk: f.reportAsk.value.trim() || DEFAULTS.reportAsk,
+        supplier: f.supplier.value.trim() || DEFAULTS.supplier,
+        delivery: f.delivery.value.trim() || DEFAULTS.delivery,
+        items: rows.length ? rows : clone(DEFAULTS.items),
+      };
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(S)); } catch (err) { /* storage unavailable */ }
+      dlg.close();
+      use(S.startWith);
+    });
+    dlg.showModal();
+  };
+  $('#ai-settings-open').addEventListener('click', openSettings);
+
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver((entries) => { inView = entries.some((e) => e.isIntersecting); sync(); }, { threshold: 0.1 }).observe(demo);
