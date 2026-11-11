@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#050706">
-  <meta name="description" content="Custom software for Australian businesses, built in days. Have the meeting, and AI helps us build while we talk. No per-seat fees, no one-size-fits-all.">
-  <meta property="og:title" content="Sunday Solutions · Have the meeting. Leave with the software.">
+  <meta name="description" content="Custom software for Australian businesses, built in days and connected to the tools you already use. No per-seat fees, no one-size-fits-all.">
+  <meta property="og:title" content="Sunday Solutions · Software built around your business">
   <meta property="og:description" content="Custom systems built around your business in a couple of days. Fixed price, yours to keep.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sunday-solutions.github.io/">
   <title>Sunday Solutions | Custom software, built in days</title>
   <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/fonts.css">
-  <link rel="stylesheet" href="home.css?v=3">
+  <link rel="stylesheet" href="home.css?v=8">
   <script src="app.js?v=2" defer></script>
-  <script src="hero.js?v=2" defer></script>
+  <script src="hero.js?v=5" defer></script>
   <script src="brand.js" defer></script>
 </head>
 <body>
@@ -60,8 +60,8 @@
       <div class="container hero-grid">
         <div class="hero-copy">
           <p class="pill"><i class="live"></i> Custom software, built in days</p>
-          <h1>Have the meeting.<br><span class="grad">Leave with the software.</span></h1>
-          <p class="hero-lead">Tell us how your business runs. AI listens in while we chat, and you'll see a working first version before we hang up. A couple of days later it's built around you, and it's yours.</p>
+          <h1>Software that fits<br><span class="grad">your business.</span></h1>
+          <p class="hero-lead">Off-the-shelf tools do the basics for everyone. We build systems that fit how you work, connected to the apps you already use. Days, not months. Fixed price, and it's yours to keep.</p>
           <div class="hero-actions">
             <a class="btn btn-sun" href="#quote">Book a chat <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
             <a class="btn btn-ghost" href="#how">How it works</a>
@@ -75,20 +75,18 @@
 
         <!-- AI report animation -->
         <figure class="ai" id="ai-demo">
-          <figcaption class="sr-only">Animation: someone asks Sunday AI for this month's report. It pulls from Gmail, Xero, their calendar and a spreadsheet all at once, writes the report, makes a PDF and emails it to the right people.</figcaption>
-          <div class="ai-window" aria-hidden="true">
+          <figcaption class="sr-only">Animation: someone asks Sunday AI for this month's report. Sunday AI asks Gmail, Xero, the calendar and a sales spreadsheet at the same time, and the data flows back to it. It writes the report as a PDF, emails it to three key people and sends a copy to the office printer.</figcaption>
+          <div class="ai-window">
             <div class="ai-bar">
-              <span class="ai-dots"><i></i><i></i><i></i></span>
+              <span class="ai-dots" aria-hidden="true"><i></i><i></i><i></i></span>
               <span class="ai-title"><img src="assets/logo-mark.svg" alt="" width="16" height="16"> Sunday AI</span>
-              <span class="ai-status" id="ai-status"><i></i><b>Ready</b></span>
+              <span class="ai-switch" role="group" aria-label="Animation style">
+                <button type="button" data-demo="flow" aria-pressed="true">Diagram</button>
+                <button type="button" data-demo="chat" aria-pressed="false">Chat</button>
+              </span>
+              <span class="ai-status" id="ai-status" aria-hidden="true"><i></i><b>Ready</b></span>
             </div>
-            <div class="ai-feed" id="ai-feed"></div>
-            <div class="ai-input">
-              <span class="ai-typed" id="ai-typed"></span><span class="ai-caret"></span>
-              <span class="ai-placeholder" id="ai-placeholder">Ask for anything…</span>
-              <span class="ai-send" id="ai-send"><svg class="icon"><use href="#i-arrow"/></svg></span>
-            </div>
-            <svg class="ai-cursor" id="ai-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg>
+            <div class="ai-body" id="ai-body" aria-hidden="true"></div>
           </div>
         </figure>
       </div>
@@ -139,26 +137,26 @@
       <div class="container">
         <div class="section-head">
           <p class="kicker">How it works</p>
-          <h2>The meeting <span class="leaf">is</span> the build.</h2>
-          <p class="section-lead">No 40-page brief. No three-month wait. Just a good chat, and software that turns up while we're still talking.</p>
+          <h2>From a chat to a working system, <span class="leaf">in days.</span></h2>
+          <p class="section-lead">No 40-page brief and no three-month wait. Tell us the problem, and you'll see something real, fast.</p>
         </div>
         <ol class="steps">
           <li class="step">
-            <span class="step-num">01 / LISTEN</span>
+            <span class="step-num">01 / CHAT</span>
             <span class="step-ic"><svg class="icon"><use href="#i-mic"/></svg></span>
             <h3>Have a chat</h3>
-            <p>Tell us what's slowing you down, on a call or over a coffee. AI listens and takes the notes, so you only explain it once.</p>
+            <p>Tell us what's slowing you down, on a call or over a coffee. No tech talk needed.</p>
           </li>
           <li class="step">
             <span class="step-num">02 / BUILD</span>
             <span class="step-ic"><svg class="icon"><use href="#i-tools"/></svg></span>
             <h3>Watch it take shape</h3>
-            <p>While we talk, the first version comes together on screen. You point, we tweak. By the end of the meeting there's something real to click on.</p>
+            <p>We build fast and show you as we go. You point, we tweak, until it fits the way you work.</p>
           </li>
           <li class="step">
             <span class="step-num">03 / HAND OVER</span>
             <span class="step-ic"><svg class="icon"><use href="#i-leaf"/></svg></span>
-            <h3>Yours in a couple of days</h3>
+            <h3>Yours in days</h3>
             <p>We polish it, connect it to the tools you already use and hand it over. Fixed price, and it's yours to keep.</p>
           </li>
         </ol>
@@ -181,6 +179,15 @@
           <div class="compare-row" role="row"><span role="cell">You change how you work to fit it</span><span role="cell">Built around how you already work</span></div>
           <div class="compare-row" role="row"><span role="cell">Yet another login for your team</span><span role="cell">Plugs into Gmail, Xero and the rest</span></div>
         </div>
+      </div>
+    </section>
+
+    <!-- THE FUTURE -->
+    <section class="future" aria-labelledby="future-title">
+      <div class="container future-inner">
+        <p class="kicker">Where software is heading</p>
+        <h2 id="future-title">Have the meeting.<br><span class="grad">Leave with the software.</span></h2>
+        <p>AI is making custom software so quick to build that soon you'll describe what you need in a meeting, and walk out with it working. We're already close: have the meeting with us, and your system is built and running <strong>within days</strong>. Big one-size-fits-all platforms won't keep up. Sunday is built for that future.</p>
       </div>
     </section>
 
@@ -257,7 +264,7 @@
           <p class="section-lead">And if yours isn't here, we're happy to have a chat.</p>
         </div>
         <div class="faqs">
-          <details><summary>Will AI really be in our meeting?<span class="plus"></span></summary><p>Only if you're happy with it. It listens and takes notes so we can build faster and you don't have to repeat yourself. Prefer not? No worries, we'll take notes the old-fashioned way.</p></details>
+          <details><summary>Do you use AI to build?<span class="plus"></span></summary><p>Yes. It helps us build faster, which keeps prices down. Real people plan it, check it and look after it.</p></details>
           <details><summary>Do I need to know what software I need?<span class="plus"></span></summary><p>Not at all. Tell us what you're trying to do, or what's slowing you down. We'll work out a practical next step and explain it in plain English.</p></details>
           <details><summary>How much will it cost?<span class="plus"></span></summary><p>It depends on the job. We'll give you a fixed-price quote for the agreed work before we start. Any hosting or ongoing costs are set out too, so you can make a proper decision.</p></details>
           <details><summary>Can you work with the tools I already use?<span class="plus"></span></summary><p>Usually, yes. Gmail, Outlook, Xero, MYOB, spreadsheets and plenty more. We'll check what's possible before recommending anything new.</p></details>
