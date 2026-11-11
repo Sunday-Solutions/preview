@@ -226,29 +226,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .inv-low { padding: 8px 12px; border-top: 1px solid var(--line); font-size: 12px; font-weight: 600; color: var(--sun); opacity: 0; transition: opacity .3s; }
 .inv-low.on { opacity: 1; }
 .stock-ic { flex: none; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: rgba(155, 229, 139, .15); color: var(--leaf); }
-/* Phone camera moment at the start of the stocktake */
-.phone-backdrop { position: absolute; inset: 0; z-index: 6; background: rgba(3, 5, 4, .6); opacity: 0; pointer-events: none; transition: opacity .35s; }
-.phone-backdrop.is-on { opacity: 1; }
-.phone { position: absolute; z-index: 7; left: 50%; bottom: 16px; width: 190px; height: 364px; margin-left: -95px; border-radius: 32px; background: #050706; border: 6px solid #1d2420; box-shadow: 0 30px 70px rgba(0, 0, 0, .65), inset 0 0 0 1px rgba(255, 255, 255, .06); transform: translateY(125%) rotate(-5deg); opacity: 0; pointer-events: none; transition: transform .55s cubic-bezier(.2, .8, .2, 1), opacity .3s; }
-.phone.is-on { transform: translateY(0) rotate(-2deg); opacity: 1; }
-.phone::before { content: ""; position: absolute; z-index: 5; top: 7px; left: 50%; width: 60px; height: 17px; margin-left: -30px; border-radius: 10px; background: #000; }
-.phone-screen { position: absolute; inset: 0; border-radius: 26px; overflow: hidden; background: #000; }
-.phone-view { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 42% 50%; transform: scale(1.12); }
-.phone.is-aiming .phone-view { animation: handheld 1.4s ease-in-out infinite alternate; }
-@keyframes handheld { 0% { transform: scale(1.12) translate(0, 0) rotate(0); } 50% { transform: scale(1.15) translate(-4px, 3px) rotate(-.6deg); } 100% { transform: scale(1.13) translate(3px, -2px) rotate(.4deg); } }
-.phone-focus { position: absolute; z-index: 2; left: 50%; top: 40%; width: 72px; height: 72px; margin: -36px 0 0 -36px; border: 1.5px solid var(--sun); border-radius: 8px; opacity: 0; transform: scale(1.5); transition: opacity .2s, transform .35s; }
-.phone.is-focused .phone-focus { opacity: 1; transform: scale(1); }
-.phone.is-shot .phone-focus { opacity: 0; }
-.phone-ui { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 9px; padding-bottom: 14px; background: linear-gradient(to top, rgba(0, 0, 0, .8), transparent); }
-.phone-mode { font-family: var(--mono); font-size: 9px; letter-spacing: .16em; color: var(--sun); }
-.phone-shutter { width: 46px; height: 46px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, .35); transition: transform .12s; }
-.phone-shutter.is-pressed { transform: scale(.8); }
-.phone-thumb { position: absolute; z-index: 3; left: 14px; bottom: 20px; width: 34px; height: 34px; border-radius: 8px; border: 2px solid #fff; object-fit: cover; opacity: 0; transform: scale(.3); transition: opacity .2s, transform .3s; }
-.phone.is-shot .phone-thumb { opacity: 1; transform: scale(1); }
-.phone-flash { position: absolute; z-index: 4; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
-.phone-flash.is-on { animation: phone-flash .45s ease-out; }
-@keyframes phone-flash { 0% { opacity: .95; } 100% { opacity: 0; } }
-
 /* Ordermentum order (a light "app screen" inside the chat) */
 .mini-logo { display: inline-block; flex: none; width: 17px; height: 17px; border-radius: 50%; padding: 1px !important; }
 .om { background: #fbfaf8; color: #1f2321; border-radius: 12px; overflow: hidden; font-size: 12.5px; }
@@ -572,6 +549,6 @@ dialog .btn { margin-top: 8px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .fireflies, .ridge-line { display: none; }
-  .grass .sway-a, .grass .sway-b, .live, .src-state, .ai-caret, .wire, .core-spin, .core::after, .node-tick, .phone-view { animation: none !important; }
+  .grass .sway-a, .grass .sway-b, .live, .src-state, .ai-caret, .wire, .core-spin, .core::after, .node-tick { animation: none !important; }
   .msg { animation: none; }
 }
