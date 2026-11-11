@@ -1,6 +1,6 @@
 // Homepage extras: header on scroll, the grass and fireflies, and the "give me a report" AI demo.
-// The demo has two versions that take turns; the Diagram / Chat buttons on the card jump to one
-// (?demo=chat in the address starts with the chat version).
+// The demo has two examples that take turns: a diagram of the monthly report, and a chat that does the
+// report then a stocktake from a photo. The tabs on the card jump to one; ?demo=chat starts with the chat.
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);
   const NS = 'http://www.w3.org/2000/svg';
@@ -78,6 +78,7 @@
 
   // ---- Shared timing helpers. Bumping `run` cancels whatever is playing. ----
   let run = 0;
+  let flowBodyH = 0;   // the diagram's height, so the chat can match it and the card never changes size
   let playing = false;
   const STOP = new Error('stopped');
   const wait = (ms, id) => new Promise((res, rej) => setTimeout(() => (id === run ? res() : rej(STOP)), ms));
@@ -94,7 +95,7 @@
   const setStatus = (state, text) => { status.dataset.state = state; status.querySelector('b').textContent = text; };
   const typeInto = async (el, placeholder, text, id) => {
     placeholder.classList.add('is-hidden');
-    for (const ch of text) { el.textContent += ch; await wait(34 + Math.random() * 46, id); }
+    for (const ch of text) { el.textContent += ch; el.scrollLeft = el.scrollWidth; await wait(30 + Math.random() * 40, id); }
   };
   const inputHtml = () => `<div class="ai-input"><span class="ai-typed"></span><span class="ai-caret"></span><span class="ai-placeholder">Ask for anything…</span><span class="ai-send">${icon('i-arrow')}</span></div>`;
   const pressSend = async (box, id) => {
@@ -171,6 +172,7 @@
       els.wires.pdf.setAttribute('d', `M${cx} ${cy}L${L.pdf[0]} ${L.pdf[1]}`);
       els.wires.print.setAttribute('d', drop(L.pdf, L.print));
       els.wires.email.setAttribute('d', drop(L.pdf, L.email));
+      flowBodyH = els.box.offsetHeight;
     };
 
     // A glowing dot travelling along a wire. reverse = from the far end back towards Sunday AI.
@@ -329,17 +331,37 @@
   })();
 
   // =====================================================================
-  //  Version 2: Chat. The original chat-window animation.
+  //  Version 2: Chat. Two requests in one conversation: this month's report, then a
+  //  stocktake from a photo (the AI counts every box and saves it to the inventory).
+  //  Photo: "Cardboard box lot" by CHUTTERSNAP on Unsplash (Unsplash License).
   // =====================================================================
   const chat = (() => {
     const SOURCE_MS = [1500, 2100, 1250, 1800];
+    const PHOTO = 'assets/stocktake-boxes.jpg';
+    const ASK = 'Count all these boxes and save it to our inventory';
+    // Each box in the photo, as x, y, width, height on the 900 x 601 image.
+    const BOXES = [
+      [5, 25, 177, 147], [155, 0, 125, 82], [180, 82, 98, 63], [287, 15, 153, 72], [282, 84, 158, 50], [288, 118, 170, 128],
+      [455, 0, 73, 72], [515, 35, 135, 85], [457, 76, 58, 108], [508, 118, 137, 112], [650, 20, 130, 82], [650, 100, 145, 112],
+      [778, 28, 122, 50], [782, 80, 118, 108], [645, 207, 163, 106], [798, 177, 84, 120], [0, 165, 187, 85], [187, 180, 101, 58],
+      [0, 236, 225, 75], [225, 242, 80, 100], [303, 245, 102, 108], [405, 272, 133, 104], [532, 228, 123, 110], [0, 294, 268, 108],
+      [650, 302, 128, 86], [780, 297, 120, 126], [530, 332, 122, 78], [296, 332, 174, 182], [135, 383, 168, 134], [520, 400, 118, 96],
+      [638, 388, 152, 126], [0, 404, 146, 100], [458, 437, 167, 164], [657, 488, 140, 113], [828, 370, 72, 188], [0, 504, 148, 97],
+      [150, 507, 155, 94], [305, 507, 153, 94],
+    ].sort((a, b) => (a[1] + a[3] / 2) - (b[1] + b[3] / 2));
+    const TOTAL = BOXES.length;
+    const CATEGORIES = [['Rice and grains', 9], ['Canned and jarred', 8], ['Sauces', 6], ['Snacks and drinks', 7], ['Cleaning', 3]];
+    CATEGORIES.push(['Other', TOTAL - CATEGORIES.reduce((n, [, c]) => n + c, 0)]);
+    const LOW = 'Bleach, Sardines';
     const head = (text) => `<div class="msg-head"><img src="assets/logo-mark.svg" alt=""><span class="head-text">${text}</span></div>`;
     let els = null;
 
     const build = () => {
       body.dataset.demo = 'chat';
       body.innerHTML = `<div class="ai-feed"></div>${inputHtml()}<svg class="ai-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg>`;
-      els = { box: body, feed: $('.ai-feed', body), typed: $('.ai-typed', body), placeholder: $('.ai-placeholder', body), cursor: $('.ai-cursor', body) };
+      $('.ai-input', body).insertAdjacentHTML('afterbegin', `<span class="ai-attach"><img src="${PHOTO}" alt="">stockroom.jpg</span>`);
+      els = { box: body, feed: $('.ai-feed', body), typed: $('.ai-typed', body), placeholder: $('.ai-placeholder', body), cursor: $('.ai-cursor', body), attach: $('.ai-attach', body) };
+      if (flowBodyH) els.feed.style.height = `${els.feed.offsetHeight + flowBodyH - body.offsetHeight}px`;
     };
     const add = (html) => { const tmp = document.createElement('div'); tmp.innerHTML = html.trim(); const el = tmp.firstElementChild; els.feed.appendChild(el); return el; };
 
@@ -358,10 +380,31 @@
     const sentHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Done. Report sent.' : 'Emailing the people who need it…')}<div class="people">${PEOPLE.map(([ini, name, role, c]) =>
       `<span class="person${done ? ' on' : ''}"><i style="--c:${c}">${ini}</i>${name} · ${role} ${icon('i-check')}</span>`).join('')}</div><p class="sent-note${done ? ' on' : ''}">Sent to 3 people · 9:02am</p></div>`;
 
+    const askHtml = () => `<div class="msg msg-user msg-photo"><img src="${PHOTO}" alt=""><span>${ASK}</span></div>`;
+    const countHtml = (done) => `<div class="msg msg-ai">${head(done ? `Counted ${TOTAL} boxes.` : 'Counting boxes…')}
+      <div class="scan"><img src="${PHOTO}" alt="">
+        <svg viewBox="0 0 900 601" preserveAspectRatio="none"><defs><linearGradient id="scan-grad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9be58b" stop-opacity="0"/><stop offset="1" stop-color="#9be58b" stop-opacity=".55"/></linearGradient></defs>
+          ${BOXES.map(([x, y, w, h]) => `<rect class="bx${done ? ' on' : ''}" x="${x + 4}" y="${y + 4}" width="${w - 8}" height="${h - 8}" rx="8"/>`).join('')}
+          <rect class="scan-line" x="0" y="-60" width="900" height="60"/></svg>
+        <span class="scan-count"><b>${done ? TOTAL : 0}</b> boxes</span>
+      </div></div>`;
+    const invHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Inventory updated.' : 'Saving to your inventory…')}
+      <div class="inv"><div class="inv-head"><span class="inv-ic">${icon('i-grid')}</span><b>Inventory</b><small>Stockroom · today</small></div>
+        ${CATEGORIES.map(([name, n]) => `<div class="inv-row${done ? ' on' : ''}"><span>${name}</span><b>${n} boxes</b><i></i></div>`).join('')}
+        <div class="inv-low${done ? ' on' : ''}">Low stock: ${LOW}</div>
+      </div></div>`;
+    const savedHtml = () => `<div class="msg msg-ai"><div class="pdf"><span class="stock-ic">${icon('i-check')}</span><span><b>Stocktake saved</b><small>${TOTAL} boxes · ${CATEGORIES.length} categories · 2 low</small></span><span class="pdf-ready">Saved</span></div>
+      <div class="acts"><span class="act" data-act="view">${icon('i-grid')} View inventory</span><span class="act act-primary" data-act="order">${icon('i-invoice')} Reorder low stock</span></div></div>`;
+    const orderHtml = (done) => `<div class="msg msg-ai">${head(done ? 'Draft order ready.' : 'Drafting an order…')}<div class="people">
+      <span class="person${done ? ' on' : ''}"><i style="--c:#f5ca45">B</i>Bleach · 2 cartons ${icon('i-check')}</span>
+      <span class="person${done ? ' on' : ''}"><i style="--c:#8fd3ff">S</i>Sardines · 3 cartons ${icon('i-check')}</span></div>
+      <p class="sent-note${done ? ' on' : ''}">Waiting for your OK before it goes to the supplier</p></div>`;
+
     const reset = () => {
       els.feed.innerHTML = '';
       els.typed.textContent = '';
       els.placeholder.classList.remove('is-hidden');
+      els.attach.classList.remove('on');
       els.cursor.classList.remove('is-on');
       win.classList.remove('is-fading');
       setStatus('idle', 'Ready');
@@ -432,6 +475,65 @@
       $('.head-text', sentMsg).textContent = 'Done. Report sent.';
       $('.sent-note', sentMsg).classList.add('on');
       setStatus('done', 'Done');
+      await wait(2200, id);
+
+      // Example 2, part 1: attach a photo of the stockroom and ask
+      setStatus('listening', 'Listening');
+      els.placeholder.classList.add('is-hidden');
+      els.attach.classList.add('on');
+      await wait(450, id);
+      await typeInto(els.typed, els.placeholder, ASK, id);
+      await pressSend(els.box, id);
+      els.attach.classList.remove('on');
+      add(askHtml());
+      await wait(500, id);
+
+      // Part 2: count every box, sweeping down the photo
+      setStatus('working', 'Counting');
+      const countMsg = add(countHtml(false));
+      const rects = [...countMsg.querySelectorAll('.bx')];
+      const line = $('.scan-line', countMsg), num = $('.scan-count b', countMsg);
+      let counted = 0;
+      await frames(2700, id, (p) => {
+        const y = p * 661 - 60;
+        line.setAttribute('y', y.toFixed(1));
+        BOXES.forEach(([, by, , bh], i) => {
+          if (!rects[i].classList.contains('on') && by + bh / 2 <= y + 60) { rects[i].classList.add('on'); counted++; num.textContent = counted; }
+        });
+      });
+      rects.forEach((r) => r.classList.add('on'));
+      num.textContent = TOTAL;
+      line.setAttribute('y', '-60');
+      $('.head-text', countMsg).textContent = `Counted ${TOTAL} boxes.`;
+      await wait(450, id);
+
+      // Part 3: save the count to the inventory
+      setStatus('working', 'Saving');
+      const invMsg = add(invHtml(false));
+      for (const row of invMsg.querySelectorAll('.inv-row')) { await wait(230, id); row.classList.add('on'); }
+      await wait(250, id);
+      $('.inv-low', invMsg).classList.add('on');
+      $('.head-text', invMsg).textContent = 'Inventory updated.';
+      await wait(500, id);
+
+      // Part 4: saved, with a one-click reorder
+      const savedMsg = add(savedHtml());
+      setStatus('done', 'Saved');
+      await wait(900, id);
+      const orderBtn = $('[data-act="order"]', savedMsg);
+      await moveCursorTo(orderBtn, id);
+      orderBtn.classList.add('is-pressed');
+      await wait(200, id);
+      orderBtn.classList.remove('is-pressed');
+      els.cursor.classList.remove('is-on');
+
+      setStatus('working', 'Ordering');
+      const orderMsg = add(orderHtml(false));
+      for (const item of orderMsg.querySelectorAll('.person')) { await wait(380, id); item.classList.add('on'); }
+      await wait(300, id);
+      $('.head-text', orderMsg).textContent = 'Draft order ready.';
+      $('.sent-note', orderMsg).classList.add('on');
+      setStatus('done', 'Done');
       await wait(3400, id);
       win.classList.add('is-fading');
       await wait(650, id);
@@ -444,6 +546,11 @@
       add(reportHtml(true));
       add(pdfHtml());
       add(sentHtml(true));
+      add(askHtml());
+      add(countHtml(true));
+      add(invHtml(true));
+      add(savedHtml());
+      add(orderHtml(true));
       setStatus('done', 'Done');
     };
     const destroy = () => { els = null; };
@@ -453,18 +560,35 @@
   // =====================================================================
   //  Switching between versions, and only animating while on screen
   // =====================================================================
-  // The two versions take turns: when one finishes it fades out and the other plays.
-  // Clicking Diagram or Chat jumps straight to that one, and the turns carry on from there.
+  // The two examples take turns: Diagram, then Chat, then round again. When one
+  // finishes it fades out and the next plays. The active tab fills up as its example plays.
+  // Clicking a tab jumps straight to that example, and the turns carry on from there.
   const DEMOS = { flow, chat };
-  const other = (name) => (name === 'flow' ? 'chat' : 'flow');
+  const ORDER = ['flow', 'chat'];
+  const ROUGH_MS = { flow: 16500, chat: 32000 };   // roughly how long each one plays
+  const next = (name) => ORDER[(ORDER.indexOf(name) + 1) % ORDER.length];
+  const tabs = [...demo.querySelectorAll('.ai-switch button')];
   let current = null;
   let inView = false;
+  let progressRaf = 0;
 
   const show = (name) => {
     if (current) DEMOS[current].destroy();
     current = name;
     DEMOS[name].build();
-    demo.querySelectorAll('.ai-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === name)));
+    tabs.forEach((b) => { b.setAttribute('aria-pressed', String(b.dataset.demo === name)); b.style.setProperty('--p', '0'); });
+  };
+  const trackProgress = (name, id) => {
+    cancelAnimationFrame(progressRaf);
+    const tab = tabs.find((b) => b.dataset.demo === name);
+    if (!tab) return;
+    const t0 = performance.now();
+    const tick = (now) => {
+      if (id !== run || current !== name) return;
+      tab.style.setProperty('--p', Math.min(1, (now - t0) / ROUGH_MS[name]).toFixed(3));
+      progressRaf = requestAnimationFrame(tick);
+    };
+    progressRaf = requestAnimationFrame(tick);
   };
 
   const stop = () => { run++; playing = false; };
@@ -475,9 +599,10 @@
     // Errors after a switch or stop are just leftovers from the cancelled run, so they're ignored.
     try {
       for (;;) {
+        trackProgress(current, id);
         await DEMOS[current].play(id);
         if (id !== run) return;
-        show(other(current));
+        show(next(current));
       }
     } catch (e) { if (e !== STOP && id === run) throw e; }
   }
@@ -491,14 +616,14 @@
     if (reduceMotion) DEMOS[name].final(); else sync();
   };
 
-  demo.querySelectorAll('.ai-switch button').forEach((b) => b.addEventListener('click', () => use(b.dataset.demo)));
+  tabs.forEach((b) => b.addEventListener('click', () => use(b.dataset.demo)));
 
-  // ?demo=chat starts with the chat version (handy for showing someone); otherwise the diagram goes first.
+  // ?demo=chat starts with the chat example (handy for showing someone); otherwise the diagram goes first.
   const fromUrl = new URLSearchParams(window.location.search).get('demo');
   use(fromUrl && DEMOS[fromUrl] ? fromUrl : 'flow');
 
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver((entries) => { inView = entries.some((e) => e.isIntersecting); sync(); }, { threshold: 0.25 }).observe(demo);
+    new IntersectionObserver((entries) => { inView = entries.some((e) => e.isIntersecting); sync(); }, { threshold: 0.1 }).observe(demo);
   } else {
     inView = true;
     sync();

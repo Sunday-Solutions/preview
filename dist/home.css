@@ -172,7 +172,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .sent-note { margin-top: 9px; font-family: var(--mono); font-size: 11px; color: var(--leaf); opacity: 0; transition: opacity .3s; }
 .sent-note.on { opacity: 1; }
 .ai-input { position: relative; display: flex; align-items: center; margin: 10px 14px 14px; padding: 7px 7px 7px 14px; min-height: 48px; border: 1px solid var(--line2); border-radius: 14px; background: rgba(0, 0, 0, .3); font-size: 14px; }
-.ai-typed { white-space: nowrap; overflow: hidden; }
+.ai-typed { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; }
 .ai-caret { width: 2px; height: 18px; margin-left: 1px; background: var(--leaf); animation: caret 1s steps(1) infinite; }
 @keyframes caret { 50% { opacity: 0; } }
 .ai-placeholder { position: absolute; left: 17px; color: var(--dim); pointer-events: none; transition: opacity .15s; }
@@ -192,6 +192,39 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .ai-switch button:hover { color: var(--text); }
 .ai-switch button[aria-pressed="true"] { background: rgba(255, 255, 255, .1); color: var(--text); }
 .ai-switch + .ai-status { margin-left: 0; }
+/* The active tab fills up as its example plays, so you can see a switch coming. */
+.ai-switch button { position: relative; overflow: hidden; }
+.ai-switch button::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: var(--leaf); transform: scaleX(var(--p, 0)); transform-origin: left; opacity: 0; }
+.ai-switch button[aria-pressed="true"]::after { opacity: 1; }
+
+/* Stocktake part of the chat example */
+.ai-attach { display: none; flex: none; align-items: center; gap: 6px; margin-right: 8px; padding: 3px 9px 3px 3px; border-radius: 8px; background: rgba(255, 255, 255, .08); font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.ai-attach.on { display: inline-flex; animation: msg-in .3s ease-out both; }
+.ai-attach img { width: 28px; height: 20px; object-fit: cover; border-radius: 5px; }
+.msg-photo { display: flex; flex-direction: column; gap: 8px; padding: 6px 6px 10px; }
+.msg-photo img { width: 210px; max-width: 100%; border-radius: 11px; }
+.msg-photo span { padding: 0 6px; }
+.scan { position: relative; border-radius: 10px; overflow: hidden; }
+.scan img { width: 100%; display: block; }
+.scan svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bx { fill: rgba(155, 229, 139, .14); stroke: var(--leaf); stroke-width: 3.5; opacity: 0; transition: opacity .2s; }
+.bx.on { opacity: 1; }
+.scan-line { fill: url(#scan-grad); }
+.scan-count { position: absolute; right: 8px; bottom: 8px; padding: 4px 11px; border-radius: 999px; background: rgba(5, 7, 6, .85); border: 1px solid rgba(155, 229, 139, .5); font-family: var(--mono); font-size: 12px; color: var(--text); }
+.scan-count b { color: var(--leaf); font-size: 14px; }
+.inv { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, .02); }
+.inv-head { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.inv-head small { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--dim); }
+.inv-ic { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; background: rgba(155, 229, 139, .1); color: var(--leaf); }
+.inv-ic .icon { width: 13px; height: 13px; }
+.inv-row { display: flex; align-items: center; gap: 10px; padding: 6px 12px; font-size: 12.5px; border-top: 1px solid rgba(255, 255, 255, .05); opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s; }
+.inv-head + .inv-row { border-top: 0; }
+.inv-row.on { opacity: 1; transform: none; }
+.inv-row b { margin-left: auto; font-family: var(--mono); font-weight: 500; color: var(--muted); }
+.inv-row i { width: 14px; height: 14px; border-radius: 50%; background: var(--leaf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 12 4 4 8-8' fill='none' stroke='%23071009' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/9px no-repeat; }
+.inv-low { padding: 8px 12px; border-top: 1px solid var(--line); font-size: 12px; font-weight: 600; color: var(--sun); opacity: 0; transition: opacity .3s; }
+.inv-low.on { opacity: 1; }
+.stock-ic { flex: none; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: rgba(155, 229, 139, .15); color: var(--leaf); }
 
 /* ---------- Version 1: the diagram ---------- */
 .ai-body[data-demo="flow"] .ai-input { margin: 12px 14px 2px; }
@@ -441,6 +474,7 @@ dialog .btn { margin-top: 8px; }
   .ai-input, .ai-body[data-demo="flow"] .ai-input { margin-inline: 12px; }
   .ai-log { margin-inline: 12px; font-size: 10.5px; }
   .ai-dots { display: none; }
+  .msg-photo img { width: 170px; }
   .src { grid-template-columns: 24px 1fr 14px; gap: 7px; padding: 8px; }
   .src-ic { width: 24px; height: 24px; }
   .section { padding: 84px 0; }
