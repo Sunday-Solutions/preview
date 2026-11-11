@@ -3,87 +3,342 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#183e35">
-  <meta name="description" content="Websites, software and everyday business fixes. A small Australian team, straightforward prices and free quotes within 24 hours. Sunday Solutions — let's get it sorted.">
-  <meta property="og:title" content="Sunday Solutions — Let's get it sorted.">
-  <meta property="og:description" content="Websites, software and help with the admin. Friendly Australian service at a price that makes sense.">
+  <meta name="theme-color" content="#050706">
+  <meta name="description" content="Custom software for Australian businesses, built in days. Have the meeting, and AI helps us build while we talk. No per-seat fees, no one-size-fits-all.">
+  <meta property="og:title" content="Sunday Solutions · Have the meeting. Leave with the software.">
+  <meta property="og:description" content="Custom systems built around your business in a couple of days. Fixed price, yours to keep.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sunday-solutions.github.io/">
-  <title>Sunday Solutions | Websites, software & business help</title>
+  <title>Sunday Solutions | Custom software, built in days</title>
   <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/fonts.css">
-  <link rel="stylesheet" href="styles.css?v=3">
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="home.css?v=3">
+  <script src="app.js?v=2" defer></script>
+  <script src="hero.js?v=2" defer></script>
   <script src="brand.js" defer></script>
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true"><defs>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
-    <symbol id="i-window" viewBox="0 0 32 32"><rect x="4" y="5" width="24" height="22" rx="2"/><path d="M4 12h24M9 8.5h.1m4 0h.1M10 18h7M10 22h12"/></symbol>
-    <symbol id="i-invoice" viewBox="0 0 32 32"><path d="M8 4h16v25l-4-2-4 2-4-2-4 2V4Z"/><path d="M12 10h8m-8 5h8m-8 5h4"/></symbol>
-    <symbol id="i-calendar" viewBox="0 0 32 32"><rect x="4" y="7" width="24" height="21" rx="2"/><path d="M10 3v8m12-8v8M4 15h24m-18 5h3m6 0h3m-12 4h3"/></symbol>
-    <symbol id="i-repeat" viewBox="0 0 32 32"><path d="M6 13a10 10 0 0 1 18-5l2 3M26 4v7h-7M26 19a10 10 0 0 1-18 5l-2-3m0 7v-7h7"/></symbol>
-    <symbol id="i-sheet" viewBox="0 0 32 32"><rect x="5" y="4" width="22" height="24" rx="2"/><path d="M5 12h22M5 20h22M13 12v16m7-16v16"/></symbol>
-    <symbol id="i-tools" viewBox="0 0 32 32"><path d="m7 25 9-9m4-7-5 5-2-2 5-5-2-3a8 8 0 0 0-9 10L3 24a3 3 0 0 0 5 5l10-11a8 8 0 0 0 10-9l-3-2Z"/></symbol>
-    <symbol id="i-chat" viewBox="0 0 32 32"><path d="M28 15a11 11 0 0 1-11 11h-5l-7 3 2-7a11 11 0 1 1 21-7Z"/><path d="M11 15h.1m5 0h.1m5 0h.1"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 32 32"><path d="m16 3 11 4v9c0 6-11 13-11 13S5 22 5 16V7l11-4Z"/><path d="m11 15 4 4 7-8"/></symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-ledger" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 10h18"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></symbol>
+    <symbol id="i-report" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 17v-3m3 3v-6m3 6v-4"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+    <symbol id="i-invoice" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6m-6 4h6m-6 4h3"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v6H3v-6z"/></symbol>
+    <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.5 5.5a4 4 0 0 0 5 5L12 18a2.8 2.8 0 0 1-4-4z"/><path d="m5 19 2-2"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15z"/><path d="M5 19 13 11"/></symbol>
   </defs></svg>
+
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="topline"><div class="container topline-inner"><span><span class="sun-small">☀</span> Australian made. Small business friendly.</span><span>Free quotes within 24 hours <span class="topline-separator">/</span> Open 7 days</span></div></div>
-  <header class="site-header">
+
+  <header class="site-header" id="top">
     <div class="container header-inner">
-      <a class="brand" href="#" aria-label="Sunday Solutions home"><img src="assets/logo-mark.svg" width="58" height="58" alt=""><span class="wordmark">SUNDAY<span>SOLUTIONS</span></span></a>
-      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navigation"><span></span><span></span></button>
-      <nav id="navigation" aria-label="Main navigation"><a href="#services">What we do</a><a href="#about">Why Sunday?</a><a href="#how-it-works">How it works</a><a href="#work">Our work</a><a href="#questions">FAQs</a><a class="button button-green nav-quote" href="#quote">Get a free quote <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></nav>
+      <a class="brand" href="#" aria-label="Sunday Solutions home"><img src="assets/logo-mark.svg" width="40" height="40" alt=""><span class="wordmark">SUNDAY<span>SOLUTIONS</span></span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation" aria-label="Open menu"><span></span><span></span></button>
+      <nav id="navigation" aria-label="Main navigation">
+        <a href="#how">How it works</a>
+        <a href="#build">What we build</a>
+        <a href="#work">Our work</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#questions">FAQs</a>
+        <a class="btn btn-sun nav-cta" href="#quote">Book a chat <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </nav>
     </div>
   </header>
+
   <main id="main">
+    <!-- HERO -->
     <section class="hero">
+      <div class="hero-sky" aria-hidden="true"></div>
+      <div class="fireflies" id="fireflies" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="line"></span> YOUR BUSINESS. A LITTLE EASIER.</p>
-          <h1>Let’s get your<br>business <span class="underline">sorted.</span></h1>
-          <p class="hero-description">Websites, software and help with the admin.<br class="desktop-break"> A small Australian team making everyday business<br class="wide-break"> easier, at a price that makes sense.</p>
-          <div class="hero-actions"><a href="#quote" class="button button-yellow">Get a free quote <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="text-link" href="#services">See what we can help with <span>↘</span></a></div>
-          <div class="hero-small"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> No obligation. No tech knowledge needed.</div>
+          <p class="pill"><i class="live"></i> Custom software, built in days</p>
+          <h1>Have the meeting.<br><span class="grad">Leave with the software.</span></h1>
+          <p class="hero-lead">Tell us how your business runs. AI listens in while we chat, and you'll see a working first version before we hang up. A couple of days later it's built around you, and it's yours.</p>
+          <div class="hero-actions">
+            <a class="btn btn-sun" href="#quote">Book a chat <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn-ghost" href="#how">How it works</a>
+          </div>
+          <ul class="hero-trust">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> 100% Australian made</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> No per-seat fees</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Yours to keep</li>
+          </ul>
         </div>
-        <div class="hero-visual">
-          <div class="experience-badge"><span>GOOD, HONEST</span><strong>6+</strong><span>YEARS’ EXPERIENCE</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></div>
-          <img class="hero-photo" src="assets/workday.webp" width="1200" height="1000" alt="A laptop, notebook and coffee on a sunny workshop desk" fetchpriority="high">
-          <div class="photo-note"><span class="note-check"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><div><strong>One less thing on your list.</strong><span>That’s what we’re here for.</span></div><span class="note-sun">☀</span></div>
-          <span class="photo-caption">PRACTICAL SOLUTIONS. MORE TIME FOR YOU.</span>
-        </div>
+
+        <!-- AI report animation -->
+        <figure class="ai" id="ai-demo">
+          <figcaption class="sr-only">Animation: someone asks Sunday AI for this month's report. It pulls from Gmail, Xero, their calendar and a spreadsheet all at once, writes the report, makes a PDF and emails it to the right people.</figcaption>
+          <div class="ai-window" aria-hidden="true">
+            <div class="ai-bar">
+              <span class="ai-dots"><i></i><i></i><i></i></span>
+              <span class="ai-title"><img src="assets/logo-mark.svg" alt="" width="16" height="16"> Sunday AI</span>
+              <span class="ai-status" id="ai-status"><i></i><b>Ready</b></span>
+            </div>
+            <div class="ai-feed" id="ai-feed"></div>
+            <div class="ai-input">
+              <span class="ai-typed" id="ai-typed"></span><span class="ai-caret"></span>
+              <span class="ai-placeholder" id="ai-placeholder">Ask for anything…</span>
+              <span class="ai-send" id="ai-send"><svg class="icon"><use href="#i-arrow"/></svg></span>
+            </div>
+            <svg class="ai-cursor" id="ai-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg>
+          </div>
+        </figure>
+      </div>
+
+      <!-- Landscape -->
+      <div class="land" aria-hidden="true">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice">
+          <defs>
+            <radialGradient id="sunglow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#F5CA45" stop-opacity=".55"/>
+              <stop offset=".45" stop-color="#F5CA45" stop-opacity=".12"/>
+              <stop offset="1" stop-color="#F5CA45" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="ridge" x1="0" x2="1">
+              <stop offset="0" stop-color="#9BE58B" stop-opacity="0"/>
+              <stop offset=".5" stop-color="#9BE58B"/>
+              <stop offset="1" stop-color="#9BE58B" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <circle cx="1060" cy="205" r="260" fill="url(#sunglow)"/>
+          <circle cx="1060" cy="205" r="52" fill="#F5CA45" opacity=".92"/>
+          <path class="hill-back" d="M0 205C180 150 360 168 520 188S860 128 1040 168 1320 146 1440 176V320H0Z"/>
+          <path class="ridge-line" d="M0 205C180 150 360 168 520 188S860 128 1040 168 1320 146 1440 176"/>
+          <g class="trees">
+            <g transform="translate(170 228)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+            <g transform="translate(300 226) scale(.75)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+            <g transform="translate(860 222) scale(.9)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+            <g transform="translate(1250 228) scale(1.1)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+            <g transform="translate(1360 232) scale(.7)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+          </g>
+          <path class="hill-mid" d="M0 250C200 205 420 235 640 228S1000 200 1200 225 1380 240 1440 230V320H0Z"/>
+          <path class="hill-front" d="M0 288C300 270 600 292 900 278S1300 286 1440 274V320H0Z"/>
+          <g class="grass" data-guide="M0 288C300 270 600 292 900 278S1300 286 1440 274" data-count="300"></g>
+        </svg>
       </div>
     </section>
-    <div class="assurance-strip"><div class="container assurances"><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Free, upfront quotes</span><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Quick turnaround</span><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Australian made</span><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Small jobs welcome</span></div></div>
-    <section class="services section-pad" id="services">
+
+    <!-- TOOLS STRIP -->
+    <div class="tools" aria-label="Works with the tools you already use">
+      <div class="container tools-inner">
+        <span class="tools-label">Plugs into what you already use</span>
+        <ul class="tools-list"><li>Gmail</li><li>Outlook</li><li>Xero</li><li>MYOB</li><li>Google Sheets</li><li>Excel</li><li>Shopify</li><li>Square</li><li>Slack</li></ul>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
       <div class="container">
-        <div class="section-heading"><div><p class="eyebrow">WHAT WE DO</p><h2>A bit of help goes a long way.</h2></div><p>Got something that takes too long, costs too much,<br class="desktop-break"> or just doesn’t work? There’s a good chance we can help.</p></div>
-        <div class="services-grid">
-          <a class="service" href="#quote" data-service="Websites"><span class="service-icon"><svg aria-hidden="true"><use href="#i-window"/></svg></span><h3>Websites that do the job</h3><p>A new website, a freshen-up, or a better way for customers to find you and get in touch.</p><span class="service-link">Let’s talk websites <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-          <a class="service" href="#quote" data-service="Invoicing & quoting"><span class="service-icon"><svg aria-hidden="true"><use href="#i-invoice"/></svg></span><h3>Quotes & invoices, sorted</h3><p>Less time writing them. Less time chasing them. We make the paperwork easier to keep on top of.</p><span class="service-link">Take a job off your plate <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-          <a class="service" href="#quote" data-service="Bookings & scheduling"><span class="service-icon"><svg aria-hidden="true"><use href="#i-calendar"/></svg></span><h3>Bookings without the hassle</h3><p>Let customers book online, send reminders, and keep everyone’s day running to plan.</p><span class="service-link">Get your bookings organised <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-          <a class="service" href="#quote" data-service="Repetitive admin"><span class="service-icon"><svg aria-hidden="true"><use href="#i-repeat"/></svg></span><h3>Less of the same old admin</h3><p>Copying details, sending follow-ups, pulling reports. If you keep repeating it, let’s look at fixing it.</p><span class="service-link">Save a few hours <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-          <a class="service" href="#quote" data-service="Spreadsheets & software"><span class="service-icon"><svg aria-hidden="true"><use href="#i-sheet"/></svg></span><h3>Software that fits your work</h3><p>Outgrown a spreadsheet? Paying for apps you barely use? Get something that suits the way you work.</p><span class="service-link">Find a better way <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-          <div class="service service-unsure"><span class="service-icon"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><h3>Not sure what you need?</h3><p>You don’t need the technical answer. Just tell us what’s giving you a headache. We’ll start there.</p><a class="service-link" href="#quote" data-service="Not sure — let's have a chat">Have a chat with us <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+        <div class="section-head">
+          <p class="kicker">How it works</p>
+          <h2>The meeting <span class="leaf">is</span> the build.</h2>
+          <p class="section-lead">No 40-page brief. No three-month wait. Just a good chat, and software that turns up while we're still talking.</p>
         </div>
-        <div class="work-features" id="work"><a class="work-feature" href="work/coffee-roaster/"><span class="work-feature-tag">REAL WORK · CASE STUDY</span><span class="work-feature-copy"><strong>A roasting planner for one of NSW’s biggest coffee roasters.</strong><span>From café orders to roast plan in one click. Theirs to keep, no subscription.</span></span><span class="work-feature-link">See how we did it <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a><a class="work-feature work-feature-alt" href="work/bioscout/"><span class="work-feature-tag">AI · OUR TEAM’S PAST WORK</span><span class="work-feature-copy"><strong>AI that spots crop disease under the microscope, on 500+ devices across Australia.</strong><span>Before Sunday, one of our team spent three years building the software behind BioScout’s disease alerts.</span></span><span class="work-feature-link">See what the AI sees <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">01 / LISTEN</span>
+            <span class="step-ic"><svg class="icon"><use href="#i-mic"/></svg></span>
+            <h3>Have a chat</h3>
+            <p>Tell us what's slowing you down, on a call or over a coffee. AI listens and takes the notes, so you only explain it once.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">02 / BUILD</span>
+            <span class="step-ic"><svg class="icon"><use href="#i-tools"/></svg></span>
+            <h3>Watch it take shape</h3>
+            <p>While we talk, the first version comes together on screen. You point, we tweak. By the end of the meeting there's something real to click on.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">03 / HAND OVER</span>
+            <span class="step-ic"><svg class="icon"><use href="#i-leaf"/></svg></span>
+            <h3>Yours in a couple of days</h3>
+            <p>We polish it, connect it to the tools you already use and hand it over. Fixed price, and it's yours to keep.</p>
+          </li>
+        </ol>
       </div>
     </section>
-    <section class="about" id="about">
-      <div class="container about-grid">
-        <div class="about-intro"><p class="eyebrow">NICE TO MEET YOU. WE’RE SUNDAY.</p><h2>Good people.<br>Practical help.<br><span>Fair prices.</span></h2><p>You’ve got a business to run. We’re here to make some of the everyday jobs a little easier.</p><p>With 6+ years of professional experience, we build useful websites and software for Australian businesses. You deal directly with the people doing the work, from the first chat to the finishing touches.</p><a class="text-link" href="#quote">Tell us what you’ve got in mind <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
-        <div class="promise-board"><div class="board-heading"><img src="assets/logo-mark.svg" alt="" width="46" height="46"><span>THE SUNDAY WAY</span></div><div class="promise"><span>01</span><div><h3>A straight answer</h3><p>We’ll tell you what’s possible, what it’ll cost, and whether it’s worth doing.</p></div></div><div class="promise"><span>02</span><div><h3>A price before we start</h3><p>A fixed quote for the agreed job. If the job changes, we talk first.</p></div></div><div class="promise"><span>03</span><div><h3>Help after the handover</h3><p>We show you how it works and offer ongoing care to keep things ticking along.</p></div></div><div class="board-footer">Small team. Personal service. <span>Always.</span></div></div>
+
+    <!-- WHY CUSTOM -->
+    <section class="section section-alt" id="why">
+      <div class="container why-grid">
+        <div class="why-copy">
+          <p class="kicker">Why custom, why now</p>
+          <h2>One-size-fits-all software fits nobody.</h2>
+          <p>The big platforms have to do the basics for everyone, so they never quite fit anyone. You end up paying per seat for features you don't use, and working around the one you need.</p>
+          <p class="why-punch">Now a custom system takes days, not months. So why bend your business to fit someone else's software?</p>
+        </div>
+        <div class="compare" role="table" aria-label="Off-the-shelf software compared with software built for you">
+          <div class="compare-row compare-head" role="row"><span role="columnheader">Off the shelf</span><span role="columnheader">Built for you</span></div>
+          <div class="compare-row" role="row"><span role="cell">Per-seat fees, every month, forever</span><span role="cell">Fixed price. Then $50 a month for care, if you want it</span></div>
+          <div class="compare-row" role="row"><span role="cell">Hundreds of features, missing the one you need</span><span role="cell">Exactly what you need, nothing you don't</span></div>
+          <div class="compare-row" role="row"><span role="cell">You change how you work to fit it</span><span role="cell">Built around how you already work</span></div>
+          <div class="compare-row" role="row"><span role="cell">Yet another login for your team</span><span role="cell">Plugs into Gmail, Xero and the rest</span></div>
+        </div>
       </div>
     </section>
-    <section class="process section-pad" id="how-it-works"><div class="container"><div class="section-heading"><div><p class="eyebrow">LET’S KEEP IT SIMPLE</p><h2>From “can you help?” to “all sorted”.</h2></div></div><div class="steps"><div class="step"><span class="step-number">1</span><h3>Tell us about the job</h3><p>A quick chat about what you need, what’s frustrating you, or what you’d like to do better.</p></div><div class="step"><span class="step-number">2</span><h3>Get a clear quote</h3><p>We get back to you within 24 hours. You’ll know the price and the plan before giving us the go-ahead.</p></div><div class="step"><span class="step-number">3</span><h3>We get it sorted</h3><p>We do the work, keep you in the loop, and show you how to use it. Simple as that.</p></div></div></div></section>
-    <section class="care-section"><div class="container"><div class="care-panel"><div class="care-icon"><svg><use href="#i-tools"/></svg></div><div class="care-copy"><p class="eyebrow">A LITTLE ONGOING TLC</p><h2>Built. And looked after.</h2><p>Our optional Sunday Care Plan covers servicing, maintenance and agreed small changes. Someone to turn to when you need a hand.</p><a class="text-link" href="#quote" data-service="Sunday Care Plan">Ask about Sunday Care <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div><div class="care-price"><span>Sunday Care Plan</span><div><strong>$50</strong><span>/ month</span></div><p>We’ll confirm what’s included<br>for your setup in your quote.</p></div></div></div></section>
-    <section class="faq-section section-pad" id="questions"><div class="container faq-grid"><div><p class="eyebrow">A FEW COMMON QUESTIONS</p><h2>Good question.</h2><p>And if yours isn’t here,<br>we’re happy to have a chat.</p><a class="text-link" href="#quote">Ask us anything <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div><div class="faqs"><details><summary>Do I need to know what software I need?<span class="plus"></span></summary><p>Not at all. Tell us what you’re trying to do, or what’s slowing you down. We’ll help you work out a practical next step and explain it in plain English.</p></details><details><summary>How much will it cost?<span class="plus"></span></summary><p>It depends on the job. We’ll give you a free, fixed-price quote for the agreed work before we start. Any hosting or other ongoing costs will be set out too, so you can make a proper decision.</p></details><details><summary>Can you help with a small job?<span class="plus"></span></summary><p>Absolutely. A website change, a better invoice template or one repetitive job taken off your hands is a perfectly good place to start.</p></details><details><summary>Can you work with the tools I already use?<span class="plus"></span></summary><p>Often, yes. Let us know what you use and what you want to improve. We’ll check what’s possible before recommending a change or a new build.</p></details><details><summary>What happens once the work is finished?<span class="plus"></span></summary><p>We walk you through it and make sure you know how to use it. If you’d like ongoing help, our optional $50/month Sunday Care Plan covers maintenance and agreed small changes. The quote sets out the details for your project.</p></details><details><summary>Why Sunday?<span class="plus"></span></summary><p>Because there are better things to do on a Sunday than catch up on paperwork. A little less admin means a little more time for yourself.</p></details></div></div></section>
-    <section class="quote-section" id="quote"><div class="container quote-grid"><div class="quote-copy"><p class="eyebrow">LET’S GET IT OFF YOUR TO-DO LIST</p><h2>Got a job<br> in mind?</h2><p>Big idea or little fix, tell us about it.<br>We’ll get back to you within 24 hours.</p><div class="quote-benefits"><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Free, no-obligation quote</span><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Straightforward advice</span><span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> A real person, right here in Australia</span></div><div class="email-contact"><span>Prefer to email?</span><a href="mailto:hello@sundaysolutions.com.au">hello@sundaysolutions.com.au <span>↗</span></a></div><div class="quote-sun" aria-hidden="true">☀</div></div><form class="quote-form" id="quote-form"><div class="form-heading"><h3>Tell us what needs sorting.</h3><p>No technical brief needed.</p></div><div class="form-row"><div class="field"><label for="name">Your name <span>*</span></label><input id="name" name="name" autocomplete="name" required placeholder="First and last name" maxlength="100"></div><div class="field"><label for="business">Business name <span class="optional">(optional)</span></label><input id="business" name="business" autocomplete="organization" placeholder="Your business" maxlength="120"></div></div><div class="form-row"><div class="field"><label for="email">Email address <span>*</span></label><input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" maxlength="150"></div><div class="field"><label for="phone">Phone <span class="optional">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Best contact number" maxlength="40"></div></div><div class="field"><label for="service">What can we help with?</label><select id="service" name="service"><option>Not sure — let's have a chat</option><option>Websites</option><option>Invoicing &amp; quoting</option><option>Bookings &amp; scheduling</option><option>Repetitive admin</option><option>Spreadsheets &amp; software</option><option>Sunday Care Plan</option><option>Something else</option></select></div><div class="field"><label for="message">A little about the job <span>*</span></label><textarea id="message" name="message" required rows="3" placeholder="What’s taking up your time, or what would you like a hand with?" maxlength="3000"></textarea></div><button type="submit" class="button button-green form-submit">Prepare my enquiry <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button><p class="form-note"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg> Opens an email draft for you to review and send.</p><div class="form-result" id="form-result" role="status" hidden><strong>Your enquiry is ready.</strong><p>Nothing has been sent yet. Open your email draft, or copy your enquiry and email it to hello@sundaysolutions.com.au.</p><div class="result-actions"><a id="email-draft" class="button button-green" href="#">Open email draft <span>↗</span></a><button id="copy-enquiry" class="copy-button" type="button">Copy enquiry</button></div><p class="copy-status" id="copy-status" aria-live="polite"></p><textarea id="enquiry-copy" aria-label="Your prepared enquiry" readonly hidden></textarea></div></form></div></section>
+
+    <!-- WHAT WE BUILD -->
+    <section class="section" id="build">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">What we build</p>
+          <h2>Little fixes. Whole systems.</h2>
+          <p class="section-lead">If it's repetitive, scattered across apps or living in someone's head, we can probably build it.</p>
+        </div>
+        <div class="cards">
+          <article class="card"><span class="card-ic"><svg class="icon"><use href="#i-report"/></svg></span><h3>Reports that write themselves</h3><p>Numbers from Xero, your inbox and spreadsheets, pulled into one report on a schedule.</p></article>
+          <article class="card"><span class="card-ic"><svg class="icon"><use href="#i-mic"/></svg></span><h3>Meetings into actions</h3><p>AI listens to your meetings and turns them into tasks, follow-up emails and notes.</p></article>
+          <article class="card"><span class="card-ic"><svg class="icon"><use href="#i-invoice"/></svg></span><h3>Quotes and invoices</h3><p>Quote in minutes, and let the system chase overdue invoices for you.</p></article>
+          <article class="card"><span class="card-ic"><svg class="icon"><use href="#i-dash"/></svg></span><h3>Your own dashboard</h3><p>Everything that matters on one screen, instead of six tabs and a spreadsheet.</p></article>
+          <article class="card"><span class="card-ic"><svg class="icon"><use href="#i-inbox"/></svg></span><h3>Inbox on autopilot</h3><p>Sort, tag and draft replies to the emails you get every single day.</p></article>
+          <article class="card"><span class="card-ic"><svg class="icon"><use href="#i-tools"/></svg></span><h3>Anything custom</h3><p>Booking systems, planners, portals. If you can describe it, we can build it.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR WORK -->
+    <section class="section section-alt" id="work">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Our work</p>
+          <h2>Real systems, doing real work.</h2>
+        </div>
+        <div class="work-grid">
+          <a class="work-card" href="work/coffee-roaster/">
+            <span class="work-tag">Case study · Coffee roasting</span>
+            <h3>A roasting planner for one of NSW's biggest coffee roasters.</h3>
+            <p>Café orders flow in on their own. One click works out exactly what to roast. Theirs to keep, no subscription.</p>
+            <span class="work-link">See how we did it <svg class="icon"><use href="#i-arrow"/></svg></span>
+          </a>
+          <a class="work-card" href="work/bioscout/">
+            <span class="work-tag">Our team's past work · AI</span>
+            <h3>AI that spots crop disease under the microscope, on 500+ devices.</h3>
+            <p>Before Sunday, one of our team spent three years building the software behind BioScout's disease alerts.</p>
+            <span class="work-link">See what the AI sees <svg class="icon"><use href="#i-arrow"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Pricing</p>
+          <h2>Jobs, not subscriptions.</h2>
+          <p class="section-lead">Every job gets a fixed quote before we start. Here's roughly how they shake out.</p>
+        </div>
+        <div class="prices">
+          <div class="price"><p class="price-name">Small job</p><p class="price-amt"><span>from</span> $100</p><p>A quick fix or one automation. Think an auto-reminder email or a report template.</p></div>
+          <div class="price price-feature"><p class="price-name">Medium job</p><p class="price-amt"><span>from</span> $500</p><p>A tool or workflow. Think a quoting tool or a monthly report that builds itself.</p></div>
+          <div class="price"><p class="price-name">Big job</p><p class="price-amt"><span>from</span> $2,000</p><p>A whole system. Think a custom planner, portal or dashboard for the business.</p></div>
+        </div>
+        <div class="care">
+          <div><p class="price-name">Sunday Care Plan</p><p class="care-amt">$50<span> / month, flat</span></p></div>
+          <p>Hosting, fixes and small changes, so it keeps running like day one. Not per user. Optional.</p>
+          <a class="btn btn-ghost" href="#quote" data-service="Sunday Care Plan">Ask about care</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section-alt" id="questions">
+      <div class="container faq-grid">
+        <div>
+          <p class="kicker">Questions</p>
+          <h2>Good question.</h2>
+          <p class="section-lead">And if yours isn't here, we're happy to have a chat.</p>
+        </div>
+        <div class="faqs">
+          <details><summary>Will AI really be in our meeting?<span class="plus"></span></summary><p>Only if you're happy with it. It listens and takes notes so we can build faster and you don't have to repeat yourself. Prefer not? No worries, we'll take notes the old-fashioned way.</p></details>
+          <details><summary>Do I need to know what software I need?<span class="plus"></span></summary><p>Not at all. Tell us what you're trying to do, or what's slowing you down. We'll work out a practical next step and explain it in plain English.</p></details>
+          <details><summary>How much will it cost?<span class="plus"></span></summary><p>It depends on the job. We'll give you a fixed-price quote for the agreed work before we start. Any hosting or ongoing costs are set out too, so you can make a proper decision.</p></details>
+          <details><summary>Can you work with the tools I already use?<span class="plus"></span></summary><p>Usually, yes. Gmail, Outlook, Xero, MYOB, spreadsheets and plenty more. We'll check what's possible before recommending anything new.</p></details>
+          <details><summary>Can you help with a small job?<span class="plus"></span></summary><p>Absolutely. One repetitive job taken off your hands is a perfectly good place to start.</p></details>
+          <details><summary>What happens once it's built?<span class="plus"></span></summary><p>We walk you through it and make sure you know how to use it. If you'd like ongoing help, the optional $50/month Sunday Care Plan covers maintenance and agreed small changes.</p></details>
+          <details><summary>Why Sunday?<span class="plus"></span></summary><p>Because there are better things to do on a Sunday than catch up on admin. A little less admin means a little more time for yourself.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="section quote" id="quote">
+      <div class="container quote-grid">
+        <div class="quote-copy">
+          <p class="kicker">Book a chat</p>
+          <h2>What should we build?</h2>
+          <p class="section-lead">Big idea or little fix, tell us about it. We'll get back to you within 24 hours to set up a chat.</p>
+          <ul class="quote-points">
+            <li><svg class="icon"><use href="#i-check"/></svg> Free, no-obligation chat</li>
+            <li><svg class="icon"><use href="#i-check"/></svg> Fixed quote before we start</li>
+            <li><svg class="icon"><use href="#i-check"/></svg> Real people, right here in Australia</li>
+          </ul>
+          <p class="quote-email">Prefer to email? <a href="mailto:hello@sundaysolutions.com.au">hello@sundaysolutions.com.au</a></p>
+        </div>
+        <form class="quote-form" id="quote-form">
+          <div class="form-row">
+            <div class="field"><label for="name">Your name <span>*</span></label><input id="name" name="name" autocomplete="name" required placeholder="First and last name" maxlength="100"></div>
+            <div class="field"><label for="business">Business <span class="optional">(optional)</span></label><input id="business" name="business" autocomplete="organization" placeholder="Your business" maxlength="120"></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="email">Email <span>*</span></label><input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" maxlength="150"></div>
+            <div class="field"><label for="phone">Phone <span class="optional">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Best contact number" maxlength="40"></div>
+          </div>
+          <div class="field"><label for="service">What are you after?</label>
+            <select id="service" name="service"><option>Not sure, let's have a chat</option><option>A report or automation</option><option>AI meeting notes and actions</option><option>Quotes and invoices</option><option>A dashboard</option><option>A custom tool or system</option><option>A website</option><option>Sunday Care Plan</option><option>Something else</option></select>
+          </div>
+          <div class="field"><label for="message">Tell us about it <span>*</span></label><textarea id="message" name="message" required rows="4" placeholder="What's taking up your time, or what would you love a system for?" maxlength="3000"></textarea></div>
+          <button type="submit" class="btn btn-sun form-submit">Prepare my enquiry <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <p class="form-note"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg> Opens an email draft for you to review and send. <button type="button" id="privacy-open" class="link-button">Privacy</button></p>
+          <div class="form-result" id="form-result" role="status" hidden>
+            <strong>Your enquiry is ready.</strong>
+            <p>Nothing has been sent yet. Open your email draft, or copy your enquiry and email it to hello@sundaysolutions.com.au.</p>
+            <div class="result-actions"><a id="email-draft" class="btn btn-sun" href="#">Open email draft</a><button id="copy-enquiry" class="btn btn-ghost" type="button">Copy enquiry</button></div>
+            <p class="copy-status" id="copy-status" aria-live="polite"></p>
+            <textarea id="enquiry-copy" aria-label="Your prepared enquiry" readonly hidden></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="land land-foot" aria-hidden="true">
+        <svg viewBox="0 0 1440 200" preserveAspectRatio="xMidYMax slice">
+          <path class="hill-back" d="M0 120C240 80 480 110 720 96S1180 70 1440 104V200H0Z"/>
+          <g class="trees">
+            <g transform="translate(120 118) scale(.8)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+            <g transform="translate(560 112) scale(.6)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+            <g transform="translate(1180 104) scale(.95)"><path d="M0 0C-2-22 2-42-1-62M-1-40C-10-50-16-56-24-62M0-46C8-56 14-61 22-67"/><ellipse cx="-24" cy="-70" rx="20" ry="12"/><ellipse cx="0" cy="-80" rx="25" ry="14"/><ellipse cx="23" cy="-73" rx="18" ry="11"/><ellipse cx="-6" cy="-93" rx="16" ry="10"/></g>
+          </g>
+          <path class="hill-mid" d="M0 150C300 128 620 152 900 140S1260 130 1440 142V200H0Z"/>
+          <path class="hill-front" d="M0 176C360 160 720 182 1080 166S1360 172 1440 164V200H0Z"/>
+          <g class="grass" data-guide="M0 176C360 160 720 182 1080 166S1360 172 1440 164" data-count="260"></g>
+        </svg>
+      </div>
+    </section>
   </main>
-  <footer><div class="container footer-top"><a class="brand" href="#" aria-label="Sunday Solutions home"><img src="assets/logo-mark.svg" alt="" width="52" height="52"><span class="wordmark">SUNDAY<span>SOLUTIONS</span></span></a><p>A little less admin.<br>A little more Sunday.</p><div class="footer-links"><a href="#services">What we do</a><a href="#work">Our work</a><a href="#quote">Get in touch</a><button type="button" id="privacy-open">Privacy</button></div><a class="back-top" href="#">Back to top ↑</a></div><div class="container footer-bottom"><span>© 2026 Sunday Solutions</span><span>Australian made. Small business friendly.</span></div></footer>
-  <dialog id="privacy-dialog" aria-labelledby="privacy-title"><button class="dialog-close" type="button" aria-label="Close privacy information">×</button><p class="eyebrow">YOUR DETAILS</p><h2 id="privacy-title">Privacy, simply.</h2><p>This form prepares an email enquiry in your browser. It doesn’t submit your details to a server or save them on this site.</p><p>If you choose to send the email, your name, contact details and message are shared with Sunday Solutions through your email provider. Please don’t include passwords or sensitive business information.</p><p>This page uses no advertising cookies or tracking scripts. The hosting service may keep standard access logs.</p><button type="button" class="button button-green dialog-done">Got it <svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></button></dialog>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#" aria-label="Sunday Solutions home"><img src="assets/logo-mark.svg" alt="" width="36" height="36"><span class="wordmark">SUNDAY<span>SOLUTIONS</span></span></a>
+      <p class="footer-tag">A little less admin.<br>A little more Sunday.</p>
+      <nav class="footer-links" aria-label="Footer"><a href="#how">How it works</a><a href="#work">Our work</a><a href="#pricing">Pricing</a><a href="#quote">Get in touch</a></nav>
+    </div>
+    <div class="container footer-bottom"><span>© 2026 Sunday Solutions</span><span>100% Australian made</span></div>
+  </footer>
+
+  <dialog id="privacy-dialog" aria-labelledby="privacy-title">
+    <button class="dialog-close" type="button" aria-label="Close privacy information">×</button>
+    <p class="kicker">Your details</p>
+    <h2 id="privacy-title">Privacy, simply.</h2>
+    <p>This form prepares an email enquiry in your browser. It doesn't submit your details to a server or save them on this site.</p>
+    <p>If you choose to send the email, your name, contact details and message are shared with Sunday Solutions through your email provider. Please don't include passwords or sensitive business information.</p>
+    <p>This page uses no advertising cookies or tracking scripts. The hosting service may keep standard access logs.</p>
+    <button type="button" class="btn btn-sun dialog-done">Got it</button>
+  </dialog>
 </body>
 </html>
