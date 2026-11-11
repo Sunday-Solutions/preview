@@ -22,6 +22,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Preview copies (any repo other than the live one, e.g. Sunday-Solutions/preview) are hidden
+      # from search engines and get a small "Preview" badge. Does nothing on the live site.
+      - name: Mark preview copies
+        if: github.repository != 'Sunday-Solutions/sunday-solutions.github.io'
+        run: |
+          find dist -name '*.html' -print0 | xargs -0 sed -i -E \
+            -e 's#<head>#<head>\n  <meta name="robots" content="noindex, nofollow">#' \
+            -e 's#(<body[^>]*>)#\1<a href="https://sunday-solutions.github.io/" style="position:fixed;left:12px;bottom:12px;z-index:9999;padding:6px 12px;border-radius:999px;background:rgb(245,202,69);color:rgb(11,15,13);font:700 12px/1.2 system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.35)">Preview · not live</a>#'
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
