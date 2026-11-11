@@ -389,7 +389,12 @@
       body.dataset.demo = 'chat';
       body.innerHTML = `<div class="ai-feed"></div>${inputHtml()}<svg class="ai-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg>`;
       $('.ai-input', body).insertAdjacentHTML('afterbegin', `<span class="ai-attach"><img src="${PHOTO}" alt="">stockroom.jpg</span>`);
-      els = { box: body, feed: $('.ai-feed', body), typed: $('.ai-typed', body), placeholder: $('.ai-placeholder', body), cursor: $('.ai-cursor', body), attach: $('.ai-attach', body) };
+      // A phone that slides up to take the stockroom photo before it's sent
+      body.insertAdjacentHTML('beforeend', `<div class="phone-backdrop"></div><div class="phone"><div class="phone-screen">
+        <img class="phone-view" src="${PHOTO}" alt=""><span class="phone-focus"></span>
+        <div class="phone-ui"><span class="phone-mode">PHOTO</span><span class="phone-shutter"></span></div>
+        <img class="phone-thumb" src="${PHOTO}" alt=""><span class="phone-flash"></span></div></div>`);
+      els = { box: body, feed: $('.ai-feed', body), typed: $('.ai-typed', body), placeholder: $('.ai-placeholder', body), cursor: $('.ai-cursor', body), attach: $('.ai-attach', body), phone: $('.phone', body), backdrop: $('.phone-backdrop', body) };
       if (flowBodyH) els.feed.style.height = `${els.feed.offsetHeight + flowBodyH - body.offsetHeight}px`;
     };
     const add = (html) => { const tmp = document.createElement('div'); tmp.innerHTML = html.trim(); const el = tmp.firstElementChild; els.feed.appendChild(el); return el; };
@@ -442,6 +447,9 @@
       els.placeholder.classList.remove('is-hidden');
       els.attach.classList.remove('on');
       els.cursor.classList.remove('is-on');
+      els.phone.classList.remove('is-on', 'is-aiming', 'is-focused', 'is-shot');
+      els.backdrop.classList.remove('is-on');
+      $('.phone-flash', els.phone).classList.remove('is-on');
       win.classList.remove('is-fading');
       setStatus('idle', 'Ready');
     };
@@ -466,6 +474,27 @@
 
     // ---- Example: stocktake from a photo, then reorder on Ordermentum ----
     const doStocktake = async (id) => {
+      // Snap the stockroom on the phone: slide up, focus, shutter and flash, then the photo drops into the chat
+      setStatus('listening', 'Camera');
+      els.backdrop.classList.add('is-on');
+      els.phone.classList.add('is-on', 'is-aiming');
+      await wait(1000, id);
+      els.phone.classList.add('is-focused');
+      await wait(650, id);
+      const shutter = $('.phone-shutter', els.phone), flash = $('.phone-flash', els.phone);
+      shutter.classList.add('is-pressed');
+      await wait(140, id);
+      shutter.classList.remove('is-pressed');
+      flash.classList.remove('is-on');
+      void flash.offsetWidth;
+      flash.classList.add('is-on');
+      els.phone.classList.remove('is-aiming');
+      els.phone.classList.add('is-shot');
+      await wait(750, id);
+      els.phone.classList.remove('is-on');
+      els.backdrop.classList.remove('is-on');
+      await wait(350, id);
+
       setStatus('listening', 'Listening');
       els.placeholder.classList.add('is-hidden');
       els.attach.classList.add('on');
@@ -624,7 +653,7 @@
   // Clicking a tab jumps straight to that example, and the turns carry on from there.
   const DEMOS = { flow, chat };
   const ORDER = ['flow', 'chat'];
-  const ROUGH_MS = { flow: 16500, chat: 37000 };   // roughly how long each one plays
+  const ROUGH_MS = { flow: 16500, chat: 40000 };   // roughly how long each one plays
   const next = (name) => ORDER[(ORDER.indexOf(name) + 1) % ORDER.length];
   const tabs = [...demo.querySelectorAll('.ai-switch button')];
   let current = null;
