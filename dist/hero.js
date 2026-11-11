@@ -1,6 +1,6 @@
 // Homepage extras: header on scroll, the grass and fireflies, and the "give me a report" AI demo.
-// The demo has two versions you can switch between with the Diagram / Chat buttons on the card
-// (or ?demo=flow / ?demo=chat in the address). The choice is remembered in this browser.
+// The demo has two versions that take turns; the Diagram / Chat buttons on the card jump to one
+// (?demo=chat in the address starts with the chat version).
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);
   const NS = 'http://www.w3.org/2000/svg';
@@ -453,10 +453,19 @@
   // =====================================================================
   //  Switching between versions, and only animating while on screen
   // =====================================================================
+  // The two versions take turns: when one finishes it fades out and the other plays.
+  // Clicking Diagram or Chat jumps straight to that one, and the turns carry on from there.
   const DEMOS = { flow, chat };
-  const KEY = 'ss-hero-demo';
+  const other = (name) => (name === 'flow' ? 'chat' : 'flow');
   let current = null;
   let inView = false;
+
+  const show = (name) => {
+    if (current) DEMOS[current].destroy();
+    current = name;
+    DEMOS[name].build();
+    demo.querySelectorAll('.ai-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === name)));
+  };
 
   const stop = () => { run++; playing = false; };
   async function start() {
@@ -464,31 +473,29 @@
     playing = true;
     const id = ++run;
     // Errors after a switch or stop are just leftovers from the cancelled run, so they're ignored.
-    try { for (;;) await DEMOS[current].play(id); } catch (e) { if (e !== STOP && id === run) throw e; }
+    try {
+      for (;;) {
+        await DEMOS[current].play(id);
+        if (id !== run) return;
+        show(other(current));
+      }
+    } catch (e) { if (e !== STOP && id === run) throw e; }
   }
   const sync = () => { if (reduceMotion) return; if (inView && !document.hidden) start(); else if (playing) stop(); };
 
   const use = (name) => {
     if (!DEMOS[name]) name = 'flow';
     stop();
-    if (current) DEMOS[current].destroy();
-    current = name;
     win.classList.remove('is-fading');
-    DEMOS[name].build();
-    demo.querySelectorAll('.ai-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === name)));
+    show(name);
     if (reduceMotion) DEMOS[name].final(); else sync();
   };
 
-  demo.querySelectorAll('.ai-switch button').forEach((b) => b.addEventListener('click', () => {
-    try { localStorage.setItem(KEY, b.dataset.demo); } catch (e) { /* storage unavailable */ }
-    use(b.dataset.demo);
-  }));
+  demo.querySelectorAll('.ai-switch button').forEach((b) => b.addEventListener('click', () => use(b.dataset.demo)));
 
-  let initial = 'flow';
-  try { initial = localStorage.getItem(KEY) || 'flow'; } catch (e) { /* storage unavailable */ }
+  // ?demo=chat starts with the chat version (handy for showing someone); otherwise the diagram goes first.
   const fromUrl = new URLSearchParams(window.location.search).get('demo');
-  if (fromUrl && DEMOS[fromUrl]) initial = fromUrl;
-  use(initial);
+  use(fromUrl && DEMOS[fromUrl] ? fromUrl : 'flow');
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver((entries) => { inView = entries.some((e) => e.isIntersecting); sync(); }, { threshold: 0.25 }).observe(demo);
